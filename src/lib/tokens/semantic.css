@@ -44,6 +44,8 @@
 	/* Interaction */
 	--color-accent: light-dark(var(--accent-9), var(--accent-7));
 	--color-accent-hover: light-dark(var(--accent-11), var(--accent-5));
+	/* Accent for small text: dark/light enough for 4.5:1 on tinted and pastel backgrounds too. */
+	--color-accent-text: light-dark(var(--accent-11), var(--accent-5));
 	--color-accent-subtle: light-dark(var(--accent-3), oklch(30% 0.08 var(--accent-hue)));
 	--color-accent-solid: var(--accent-9);
 	--color-accent-solid-hover: var(--accent-11);
