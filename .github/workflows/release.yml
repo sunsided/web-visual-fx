@@ -191,7 +191,9 @@ jobs:
             echo "::notice::@sunsided/web-visual-fx@${version} is already on npmjs.com"
             exit 0
           fi
-          flags=(--ignore-scripts --access public)
+          echo "npm $npm_version"
+          # Verbose logs show the OIDC token exchange (not the token), which is otherwise silent.
+          flags=(--ignore-scripts --access public --loglevel verbose)
           # Prereleases don't become `latest`.
           if [[ "$TAG" == *-* ]]; then flags+=(--tag next); fi
           npm publish package.tgz "${flags[@]}"
