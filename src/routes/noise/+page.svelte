@@ -7,7 +7,7 @@
 	import ParamControls from '#lib/components/organisms/ParamControls.svelte';
 	import PlaygroundLayout from '#lib/components/templates/PlaygroundLayout.svelte';
 	import NoiseLayer from '#lib/fx/noise/NoiseLayer.svelte';
-	import { noiseSchema } from '#lib/fx/noise/noise.js';
+	import { maxSafeFps, noiseSchema, SAFE_SLOW_FPS } from '#lib/fx/noise/noise.js';
 	import { defineSchema } from '#lib/params/schema.js';
 	import { ParamState } from '#lib/params/state.svelte.js';
 
@@ -33,6 +33,10 @@
 		noise.reset();
 		backdrop.reset();
 	}
+
+	let fpsCapped = $derived(
+		noise.values.animate && maxSafeFps(noise.values, noise.values.fps) < noise.values.fps
+	);
 
 	// Mirrors NoiseFilter.svelte, filled in with the current settings.
 	let filterCode = $derived.by(() => {
@@ -101,6 +105,12 @@
 
 	{#snippet panel()}
 		<ControlPanel title="Noise" code={noise.markup('NoiseLayer')} onreset={reset}>
+			{#if fpsCapped}
+				<p class="safety-note" role="status">
+					Animation slowed to {SAFE_SLOW_FPS} fps: this noise is coarse enough that faster changes would
+					flash across large areas, which can trigger seizures. Raise the base frequency for full speed.
+				</p>
+			{/if}
 			<ParamControls schema={noiseSchema} bind:values={noise.values} />
 			<ParamControls schema={stageSchema} bind:values={backdrop.values} />
 		</ControlPanel>
@@ -197,9 +207,13 @@
 			</p>
 			<p class="note">
 				Two caveats. Every new seed makes the browser recompute the filter for the whole area, so
-				keep the frame rate low (8–12 fps already reads as film). And only animate <em>fine</em> grain:
-				with a low base frequency, whole regions jump between light and dark many times per second. That
-				is a photosensitivity hazard (WCAG 2.3.1, three flashes).
+				keep the frame rate low (8–12 fps already reads as film). And coarse noise is a
+				photosensitivity hazard: with a low base frequency, whole regions jump between light and
+				dark on every frame. WCAG 2.3.1 allows at most three flashes per second, where a flash is a
+				change of 10% or more in the average luminance of an area about 341×256 px. Measured at the
+				most extreme settings, a base frequency of 0.02 already reaches that change in a single
+				frame, while 0.08 stays around 0.013. So the component only animates at full speed when the
+				coarser axis is at 0.1 or above, and caps everything else at {SAFE_SLOW_FPS} fps.
 			</p>
 
 			<h3>Performance notes</h3>
@@ -222,6 +236,15 @@
 </PlaygroundLayout>
 
 <style>
+	.safety-note {
+		margin: 0;
+		padding: var(--space-2) var(--space-3);
+		border-inline-start: 3px solid var(--color-accent);
+		border-radius: var(--radius-sm);
+		background: var(--color-accent-subtle);
+		font-size: var(--text-xs);
+	}
+
 	.surface {
 		position: relative;
 		isolation: isolate;

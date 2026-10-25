@@ -127,7 +127,8 @@ export const noiseSchema = defineSchema({
 		label: 'Animate (film grain)',
 		default: false,
 		group: 'Motion',
-		description: 'Cycles the seed. Disabled when the user prefers reduced motion.'
+		description:
+			'Cycles the seed. Disabled when the user prefers reduced motion; capped at 3 fps for coarse noise (photosensitivity).'
 	},
 	fps: {
 		kind: 'range',
@@ -146,3 +147,28 @@ export type NoiseOptions = Values<typeof noiseSchema>;
 
 export const turbulenceDefaults: TurbulenceOptions = defaultsOf(turbulenceSchema);
 export const noiseDefaults: NoiseOptions = defaultsOf(noiseSchema);
+
+/**
+ * Photosensitivity guard for animated noise (WCAG 2.3.1, three flashes).
+ *
+ * Re-seeding replaces the whole pattern every frame. Fine grain averages out, but large noise
+ * features make whole regions jump between light and dark. Measured worst case (fractalNoise,
+ * 1 octave, contrast 5, opaque, normal blend), as the largest frame-to-frame change of the mean
+ * relative luminance over a 341×256 px area (the general flash threshold is 0.1):
+ *
+ *   baseFrequency  0.01 → 0.22   0.02 → 0.10   0.03 → 0.024   0.05 → 0.021   0.08 → 0.013
+ *
+ * At or above `SAFE_ANIMATION_FREQUENCY` (~8× margin) any frame rate is allowed. Below it,
+ * animation is capped at `SAFE_SLOW_FPS`: three changes per second are at most 1.5 flashes.
+ */
+export const SAFE_ANIMATION_FREQUENCY = 0.1;
+export const SAFE_SLOW_FPS = 3;
+
+export function maxSafeFps(
+	{ baseFrequency, stretch }: Pick<TurbulenceOptions, 'baseFrequency' | 'stretch'>,
+	fps: number
+): number {
+	// The coarser axis decides how large the features are.
+	const frequency = baseFrequency * Math.min(1, stretch);
+	return frequency >= SAFE_ANIMATION_FREQUENCY ? fps : Math.min(fps, SAFE_SLOW_FPS);
+}

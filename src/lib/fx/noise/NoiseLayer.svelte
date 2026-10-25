@@ -9,7 +9,7 @@ Tokens: `--noise-opacity`, `--noise-blend-mode` (override the props).
 	import { MediaQuery } from 'svelte/reactivity';
 	import type { SVGAttributes } from 'svelte/elements';
 	import NoiseFilter from './NoiseFilter.svelte';
-	import { noiseDefaults as d, type NoiseOptions } from './noise';
+	import { maxSafeFps, noiseDefaults as d, type NoiseOptions } from './noise';
 
 	type Props = Partial<NoiseOptions> & Omit<SVGAttributes<SVGSVGElement>, keyof NoiseOptions>;
 
@@ -37,10 +37,11 @@ Tokens: `--noise-opacity`, `--noise-blend-mode` (override the props).
 	const reducedMotion = new MediaQuery('prefers-reduced-motion: reduce');
 
 	let frame = $state(0);
+	let safeFps = $derived(maxSafeFps({ baseFrequency, stretch }, fps));
 
 	$effect(() => {
 		if (!animate || reducedMotion.current) return;
-		const interval = 1000 / fps;
+		const interval = 1000 / safeFps;
 		let last = 0;
 		let raf = requestAnimationFrame(function tick(now) {
 			if (now - last >= interval) {
