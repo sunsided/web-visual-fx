@@ -71,3 +71,10 @@ textarea {
 	clip-path: inset(50%);
 	white-space: nowrap;
 }
+
+/* Pause every CSS animation inside a paused region (see MotionToggle, WCAG 2.2.2). */
+[data-motion='paused'] *,
+[data-motion='paused'] *::before,
+[data-motion='paused'] *::after {
+	animation-play-state: paused !important;
+}
