@@ -28,7 +28,8 @@
 	--color-surface: light-dark(var(--gray-0), var(--gray-11));
 	--color-surface-raised: light-dark(white, var(--gray-10));
 	--color-surface-sunken: light-dark(var(--gray-2), oklch(10% 0.01 var(--gray-hue)));
-	--color-overlay: light-dark(oklch(100% 0 0 / 0.6), oklch(15% 0.01 var(--gray-hue) / 0.6));
+	/* Floating panels over arbitrary content: opaque enough that text on them keeps its contrast. */
+	--color-overlay: light-dark(oklch(100% 0 0 / 0.88), oklch(15% 0.01 var(--gray-hue) / 0.88));
 
 	/* Content */
 	--color-text: light-dark(var(--gray-11), var(--gray-1));
@@ -49,6 +50,12 @@
 	--color-on-accent: white;
 	--color-control: light-dark(var(--gray-3), var(--gray-9));
 	--color-control-hover: light-dark(var(--gray-4), var(--gray-8));
+	/*
+	 * Parts that identify a control or its state (WCAG 1.4.11, ≥ 3:1 against surfaces):
+	 * unfilled slider tracks, off-state switch tracks, input borders.
+	 */
+	--color-control-track: var(--gray-6);
+	--color-control-border: var(--gray-6);
 
 	/* Focus */
 	--focus-ring-color: var(--color-accent);

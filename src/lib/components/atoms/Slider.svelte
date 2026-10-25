@@ -43,7 +43,7 @@ Tokens: `--slider-track-height`, `--slider-track`, `--slider-fill`,
 		--_track-h: var(--slider-track-height, 4px);
 		--_thumb: var(--slider-thumb-size, 14px);
 		--_fill: var(--slider-fill, var(--color-accent));
-		--_track: var(--slider-track, var(--color-control));
+		--_track: var(--slider-track, var(--color-control-track));
 		--_thumb-bg: var(--slider-thumb, var(--color-surface-raised));
 		--_thumb-border: var(--slider-thumb-border, 2px solid var(--_fill));
 

@@ -29,7 +29,7 @@ Tokens: `--select-height`, `--select-bg`, `--select-border`, `--select-radius`.
 		inline-size: 100%;
 		block-size: var(--select-height, var(--control-height-sm));
 		padding-inline: var(--space-2) var(--space-6);
-		border: 1px solid var(--select-border, var(--color-border));
+		border: 1px solid var(--select-border, var(--color-control-border));
 		border-radius: var(--select-radius, var(--control-radius));
 		background:
 			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23888' stroke-width='1.5'/%3E%3C/svg%3E")
@@ -40,6 +40,6 @@ Tokens: `--select-height`, `--select-bg`, `--select-border`, `--select-radius`.
 	}
 
 	.select:hover {
-		border-color: var(--color-border-strong);
+		border-color: var(--color-text-muted);
 	}
 </style>

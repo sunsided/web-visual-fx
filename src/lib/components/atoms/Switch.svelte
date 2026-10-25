@@ -29,7 +29,7 @@ Tokens: `--switch-width`, `--switch-height`, `--switch-track`, `--switch-track-o
 		block-size: var(--_h);
 		margin: 0;
 		border-radius: var(--radius-full);
-		background: var(--switch-track, var(--color-control));
+		background: var(--switch-track, var(--color-control-track));
 		cursor: pointer;
 		transition: background-color var(--duration-base) var(--ease-out);
 	}

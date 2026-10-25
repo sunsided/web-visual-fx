@@ -39,7 +39,7 @@ Tokens: `--control-group-gap`, `--control-group-title-color`.
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		color: var(--control-group-title-color, var(--color-text-subtle));
+		color: var(--control-group-title-color, var(--color-text-muted));
 		font-size: var(--text-2xs);
 		font-weight: var(--weight-semibold);
 		letter-spacing: var(--tracking-wide);

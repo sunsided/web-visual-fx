@@ -24,7 +24,7 @@ Tokens: `--color-input-size`, `--color-input-border`.
 		inline-size: var(--color-input-size, 1.5rem);
 		block-size: var(--color-input-size, 1.5rem);
 		padding: 0;
-		border: var(--color-input-border, 2px solid var(--color-border-strong));
+		border: var(--color-input-border, 2px solid var(--color-control-border));
 		border-radius: var(--radius-full);
 		background: none;
 		cursor: pointer;
