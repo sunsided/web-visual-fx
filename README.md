@@ -73,6 +73,9 @@ effect's schema, e.g. `fx/glass/glass.ts`). Styling goes through three token lay
 
 ## Deployment
 
-`.github/workflows/pages.yml` builds the site with `BASE_PATH` taken from
-`actions/configure-pages`, builds Storybook into `build/storybook`, and deploys to GitHub
-Pages. In the repository settings, set **Pages → Source** to **GitHub Actions**.
+`.github/workflows/pages.yml` runs on every push to `main`. It first runs the full CI
+workflow (`ci.yml`, called as a reusable workflow) and only continues if that passes: it
+builds the site with `BASE_PATH` taken from `actions/configure-pages`, builds Storybook into
+`build/storybook`, and deploys to GitHub Pages. Pull requests run CI only.
+
+In the repository settings, set **Pages → Source** to **GitHub Actions**.

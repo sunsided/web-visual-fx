@@ -1,15 +1,17 @@
 name: CI
 
+# Runs on pull requests directly. On main it runs as the first stage of pages.yml (via
+# workflow_call), so a deploy only happens after these checks pass.
 on:
   pull_request:
-  push:
-    branches: [main]
+  workflow_call:
 
 permissions: {}
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  # Superseded PR runs can go; runs called from a deploy must finish.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   check:
