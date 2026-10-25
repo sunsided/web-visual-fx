@@ -66,6 +66,20 @@ tasks:
     cmds:
       - yarn build
 
+  package:
+    desc: Build the npm package into dist/ (Svelte components, custom elements, core) and lint it
+    deps: [install]
+    preconditions: *yarn
+    cmds:
+      - yarn package
+
+  elements:generate:
+    desc: Regenerate the custom element wrappers after changing a schema or src/elements/config.ts
+    deps: [install]
+    preconditions: *yarn
+    cmds:
+      - yarn elements:generate
+
   preview:
     desc: Preview the production site build (without Storybook)
     deps: [build:site]
@@ -154,13 +168,14 @@ tasks:
       - task: lint:actions
 
   ci:
-    desc: Full CI sequence (checks, tests, build)
+    desc: Full CI sequence (checks, tests, build, package)
     cmds:
       - task: check
       - task: test
       - task: build
+      - task: package
 
   clean:
     desc: Remove build output and caches
     cmds:
-      - rm -rf build .svelte-kit storybook-static node_modules/.vite
+      - rm -rf build dist .svelte-kit storybook-static node_modules/.vite

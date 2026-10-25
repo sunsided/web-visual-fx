@@ -51,6 +51,9 @@ jobs:
           yarn build
           yarn build-storybook
 
+      - name: Build and lint the npm package
+        run: yarn package
+
   workflows:
     name: Lint workflows
     runs-on: ubuntu-latest
