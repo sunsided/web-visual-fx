@@ -1,6 +1,6 @@
 {
 	"name": "@sunsided/web-visual-fx",
-	"version": "1.0.0",
+	"version": "1.1.0-rc.1",
 	"description": "Modern visual effects for the web (liquid and frosted glass, SVG filters, holographic foil, squircles and more) as Svelte components and framework-agnostic custom elements.",
 	"license": "EUPL-1.2 OR MIT OR Apache-2.0",
 	"repository": {
