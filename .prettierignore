@@ -5,6 +5,7 @@ yarn.lock
 
 # Output
 /build/
+/dist/
 /.svelte-kit/
 /storybook-static/
 /.playwright-mcp/

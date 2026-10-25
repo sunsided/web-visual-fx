@@ -812,6 +812,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@publint/pack@npm:^0.1.7":
+  version: 0.1.7
+  resolution: "@publint/pack@npm:0.1.7"
+  dependencies:
+    tinyexec: "npm:^1.3.0"
+  checksum: 10c0/bbb63243bd86991074ea06bcdc84ad574a0ee30d694df70fdba2f5f7bbf82d4257717c243807e985b0f75199ed1fc03e17d9e86bc8944b86da49025b1f38d769
+  languageName: node
+  linkType: hard
+
 "@rolldown/binding-android-arm-eabi@npm:1.2.15":
   version: 1.2.15
   resolution: "@rolldown/binding-android-arm-eabi@npm:1.2.15"
@@ -1086,6 +1095,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sunsided/web-visual-fx@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@sunsided/web-visual-fx@workspace:."
+  dependencies:
+    "@eslint/js": "npm:^10.0.1"
+    "@storybook/addon-a11y": "npm:^10.6.3"
+    "@storybook/addon-docs": "npm:^10.6.3"
+    "@storybook/addon-svelte-csf": "npm:^5.1.5"
+    "@storybook/sveltekit": "npm:^10.6.3"
+    "@sveltejs/adapter-static": "npm:^4.0.0"
+    "@sveltejs/kit": "npm:^3.1.0"
+    "@sveltejs/package": "npm:3.0.1"
+    "@sveltejs/vite-plugin-svelte": "npm:^7.3.1"
+    "@types/node": "npm:^24.19.2"
+    eslint: "npm:^10.13.0"
+    eslint-config-prettier: "npm:^10.1.8"
+    eslint-plugin-storybook: "npm:^10.6.3"
+    eslint-plugin-svelte: "npm:^3.23.1"
+    globals: "npm:^17.13.0"
+    prettier: "npm:^3.9.10"
+    prettier-plugin-svelte: "npm:^4.1.1"
+    publint: "npm:0.3.25"
+    storybook: "npm:^10.6.3"
+    svelte: "npm:^5.57.2"
+    svelte-check: "npm:^4.7.7"
+    typescript: "npm:^6.0.3"
+    typescript-eslint: "npm:^8.72.0"
+    vite: "npm:^8.3.5"
+    vitest: "npm:^5.0.5"
+  peerDependencies:
+    svelte: ^5.0.0
+  peerDependenciesMeta:
+    svelte:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@sveltejs/acorn-typescript@npm:^1.0.13":
   version: 1.0.13
   resolution: "@sveltejs/acorn-typescript@npm:1.0.13"
@@ -1137,6 +1183,25 @@ __metadata:
   version: 0.2.3
   resolution: "@sveltejs/load-config@npm:0.2.3"
   checksum: 10c0/39d4f1045fd1a862e59317e76033d6c9212eb693df28b2beaf6b89d376eebab362bc9ba595fb71d357b998199ce879bc7d7f916c36f572b36a0894b2a5e1d1da
+  languageName: node
+  linkType: hard
+
+"@sveltejs/package@npm:3.0.1":
+  version: 3.0.1
+  resolution: "@sveltejs/package@npm:3.0.1"
+  dependencies:
+    "@sveltejs/load-config": "npm:^0.2.3"
+    chokidar: "npm:^5.0.0"
+    svelte2tsx: "npm:~0.7.60"
+  peerDependencies:
+    svelte: ^3.44.0 || ^4.0.0 || ^5.0.0-next.1
+    typescript: ^6.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  bin:
+    svelte-package: svelte-package.js
+  checksum: 10c0/9955ce2448c04d3f125fc1700d5cf17b6bcf38475b2200e13e3ce035f32c5e54c203f81f99aa85f453fff39e0f5b9e9d467e43ff61ec8102f29a511d69834ce7
   languageName: node
   linkType: hard
 
@@ -1650,6 +1715,15 @@ __metadata:
   dependencies:
     readdirp: "npm:^4.0.1"
   checksum: 10c0/a58b9df05bb452f7d105d9e7229ac82fa873741c0c40ddcc7bb82f8a909fbe3f7814c9ebe9bc9a2bef9b737c0ec6e2d699d179048ef06ad3ec46315df0ebe6ad
+  languageName: node
+  linkType: hard
+
+"chokidar@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "chokidar@npm:5.0.0"
+  dependencies:
+    readdirp: "npm:^5.0.0"
+  checksum: 10c0/42fc907cb2a7ff5c9e220f84dae75380a77997f851c2a5e7865a2cf9ae45dd407a23557208cdcdbf3ac8c93341135a1748e4c48c31855f3bfa095e5159b6bdec
   languageName: node
   linkType: hard
 
@@ -2961,6 +3035,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"package-manager-detector@npm:^1.8.0":
+  version: 1.9.0
+  resolution: "package-manager-detector@npm:1.9.0"
+  checksum: 10c0/c901b08e9d284e9b517d27be1783fc279f3e814fac9de4c30441129a3a4b1475b16314ff95b98268daf49e20d5076478c50bc7b1b3ff8a591eb39f03f02dbb16
+  languageName: node
+  linkType: hard
+
 "path-exists@npm:^4.0.0":
   version: 4.0.0
   resolution: "path-exists@npm:4.0.0"
@@ -3097,6 +3178,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"publint@npm:0.3.25":
+  version: 0.3.25
+  resolution: "publint@npm:0.3.25"
+  dependencies:
+    "@publint/pack": "npm:^0.1.7"
+    package-manager-detector: "npm:^1.8.0"
+    picocolors: "npm:^1.1.1"
+    sade: "npm:^1.8.1"
+  bin:
+    publint: ./src/cli.js
+  checksum: 10c0/b58e915978d90bce5e84295eb78b9393b58b11590f93603c03f96da5366a6474c05111c13b3aa68a0c33fa2e5215cecf15cfcb4026abadf7e01f5ec4cc82207e
+  languageName: node
+  linkType: hard
+
 "punycode@npm:^2.1.0":
   version: 2.3.1
   resolution: "punycode@npm:2.3.1"
@@ -3142,6 +3237,13 @@ __metadata:
   version: 4.1.2
   resolution: "readdirp@npm:4.1.2"
   checksum: 10c0/60a14f7619dec48c9c850255cd523e2717001b0e179dc7037cfa0895da7b9e9ab07532d324bfb118d73a710887d1e35f79c495fa91582784493e085d18c72c62
+  languageName: node
+  linkType: hard
+
+"readdirp@npm:^5.0.0":
+  version: 5.1.1
+  resolution: "readdirp@npm:5.1.1"
+  checksum: 10c0/5e99755684b9104761e48801828f4d2614efa33b1698629929c5985184dc63a7f8233c827832c40dc7be16b00cc871d303cf9de396d2fb74b9465ee2aa2424a1
   languageName: node
   linkType: hard
 
@@ -3233,7 +3335,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sade@npm:^1.7.4":
+"sade@npm:^1.7.4, sade@npm:^1.8.1":
   version: 1.8.1
   resolution: "sade@npm:1.8.1"
   dependencies:
@@ -3411,7 +3513,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte2tsx@npm:^0.7.55":
+"svelte2tsx@npm:^0.7.55, svelte2tsx@npm:~0.7.60":
   version: 0.7.62
   resolution: "svelte2tsx@npm:0.7.62"
   dependencies:
@@ -3481,7 +3583,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinyexec@npm:^1.3.1":
+"tinyexec@npm:^1.3.0, tinyexec@npm:^1.3.1":
   version: 1.3.1
   resolution: "tinyexec@npm:1.3.1"
   checksum: 10c0/c590369cb3fa73cc18a3998caec8a00f9712d91309c881be3ac52b160fb2f80c7b1fbf3591858ab6abab47ad55385b0c86ec19982e32441a01f55298dab9ccd2
@@ -3802,36 +3904,6 @@ __metadata:
   checksum: 10c0/b6e38164490c4ca0c2bbc4e74ec8f9052a344caab3f3bf0e8c4485b6493af0f789d7aafd41f4128f66d576f50d3c860f0674322add2b4d348b6ea250ec8c77c8
   languageName: node
   linkType: hard
-
-"web-visual-fx@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "web-visual-fx@workspace:."
-  dependencies:
-    "@eslint/js": "npm:^10.0.1"
-    "@storybook/addon-a11y": "npm:^10.6.3"
-    "@storybook/addon-docs": "npm:^10.6.3"
-    "@storybook/addon-svelte-csf": "npm:^5.1.5"
-    "@storybook/sveltekit": "npm:^10.6.3"
-    "@sveltejs/adapter-static": "npm:^4.0.0"
-    "@sveltejs/kit": "npm:^3.1.0"
-    "@sveltejs/vite-plugin-svelte": "npm:^7.3.1"
-    "@types/node": "npm:^24.19.2"
-    eslint: "npm:^10.13.0"
-    eslint-config-prettier: "npm:^10.1.8"
-    eslint-plugin-storybook: "npm:^10.6.3"
-    eslint-plugin-svelte: "npm:^3.23.1"
-    globals: "npm:^17.13.0"
-    prettier: "npm:^3.9.10"
-    prettier-plugin-svelte: "npm:^4.1.1"
-    storybook: "npm:^10.6.3"
-    svelte: "npm:^5.57.2"
-    svelte-check: "npm:^4.7.7"
-    typescript: "npm:^6.0.3"
-    typescript-eslint: "npm:^8.72.0"
-    vite: "npm:^8.3.5"
-    vitest: "npm:^5.0.5"
-  languageName: unknown
-  linkType: soft
 
 "webpack-virtual-modules@npm:^0.6.2":
   version: 0.6.2
