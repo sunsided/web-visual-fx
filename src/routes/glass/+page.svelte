@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
+	import Button from '#lib/components/atoms/Button.svelte';
 	import Switch from '#lib/components/atoms/Switch.svelte';
 	import CodeSnippet from '#lib/components/molecules/CodeSnippet.svelte';
 	import StageHeader from '#lib/components/molecules/StageHeader.svelte';
@@ -9,7 +10,7 @@
 	import ParamControls from '#lib/components/organisms/ParamControls.svelte';
 	import Scene, { scenes } from '#lib/components/organisms/Scene.svelte';
 	import PlaygroundLayout from '#lib/components/templates/PlaygroundLayout.svelte';
-	import { draggable } from '#lib/attachments/draggable.js';
+	import { draggable, type Position } from '#lib/attachments/draggable.js';
 	import GlassPanel from '#lib/fx/glass/GlassPanel.svelte';
 	import { glassSchema, hexToRgba } from '#lib/fx/glass/glass.js';
 	import { supportsBackdropSvgFilter } from '#lib/fx/glass/support.js';
@@ -32,6 +33,39 @@
 	function reset() {
 		glass.reset();
 		scene.reset();
+	}
+
+	// Demo panel position (offset from the center of the stage) and what to announce about it.
+	const position = $state<Position>({ x: 0, y: 0 });
+	let dragEl = $state<HTMLElement>();
+	let announcement = $state('');
+	const hintId = $props.id();
+
+	function describe({ x, y }: Position) {
+		if (x === 0 && y === 0) return 'Panel centered.';
+		const parts = [];
+		if (x) parts.push(`${Math.abs(Math.round(x))} pixels ${x > 0 ? 'right' : 'left'}`);
+		if (y) parts.push(`${Math.abs(Math.round(y))} pixels ${y > 0 ? 'down' : 'up'}`);
+		return `Panel moved to ${parts.join(' and ')} of center.`;
+	}
+
+	function announce() {
+		announcement = describe(position);
+	}
+
+	function center() {
+		position.x = 0;
+		position.y = 0;
+		announce();
+	}
+
+	// Single-pointer alternative to dragging (WCAG 2.5.7): click the backdrop to move the glass there.
+	function moveTo(e: MouseEvent) {
+		if (!dragEl || dragEl.contains(e.target as Node)) return;
+		const r = dragEl.getBoundingClientRect();
+		position.x += e.clientX - (r.left + r.width / 2);
+		position.y += e.clientY - (r.top + r.height / 2);
+		announce();
 	}
 
 	let filterCode = $derived(
@@ -98,25 +132,41 @@
 	{/snippet}
 
 	{#snippet stage()}
-		<Scene kind={scene.values.kind} animate={scene.values.animate} class="glass-stage">
-			<div
-				class="drag"
-				role="button"
-				aria-roledescription="draggable"
-				aria-label="Glass panel, drag or use arrow keys to move"
-				tabindex="0"
-				{@attach draggable()}
-			>
-				<GlassPanel {...glass.values} {forceDisplace} class="demo">
-					<p class="eyebrow">Drag me</p>
-					<h2>Frosted glass</h2>
-					<p>
-						Backdrop blur, turbulence-driven displacement, a whisper of grain and a thin rim lit
-						from one side.
-					</p>
-				</GlassPanel>
-			</div>
-		</Scene>
+		<!-- Pointer convenience only; keyboard users move the panel with its Move handle. -->
+		<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+		<div class="backdrop" onclick={moveTo}>
+			<Scene kind={scene.values.kind} animate={scene.values.animate} class="glass-stage">
+				<div
+					class="drag"
+					bind:this={dragEl}
+					style:translate="{position.x}px {position.y}px"
+					{@attach draggable({ position, onmoveend: announce })}
+				>
+					<GlassPanel {...glass.values} {forceDisplace} class="demo">
+						<div class="toolbar">
+							<p class="eyebrow">Drag me, or click the backdrop</p>
+							<Button
+								size="sm"
+								variant="ghost"
+								data-drag-handle
+								aria-label="Move panel"
+								aria-describedby={hintId}>⠿</Button
+							>
+							<Button size="sm" variant="ghost" onclick={center}>Center</Button>
+						</div>
+						<span id={hintId} class="visually-hidden">
+							Use the arrow keys to move the panel, hold Shift for bigger steps.
+						</span>
+						<h2>Frosted glass</h2>
+						<p>
+							Backdrop blur, turbulence-driven displacement, a whisper of grain and a thin rim lit
+							from one side.
+						</p>
+					</GlassPanel>
+				</div>
+			</Scene>
+		</div>
+		<p class="visually-hidden" role="status">{announcement}</p>
 	{/snippet}
 
 	{#snippet panel()}
@@ -269,11 +319,35 @@
 		place-items: center;
 	}
 
+	.backdrop {
+		display: grid;
+		block-size: 100%;
+		cursor: crosshair;
+	}
+
 	.drag {
 		inline-size: min(26rem, 85vw);
 		border-radius: 28px;
 		cursor: grab;
 		user-select: none;
+	}
+
+	.toolbar {
+		display: flex;
+		align-items: center;
+		gap: var(--space-1);
+		/* Buttons follow the glass's automatic text color, not the page theme. */
+		--button-fg: currentColor;
+		--button-bg-hover: color-mix(in oklch, currentColor 12%, transparent);
+	}
+
+	.toolbar .eyebrow {
+		margin-inline-end: auto;
+	}
+
+	.toolbar :global([data-drag-handle]) {
+		cursor: grab;
+		font-size: var(--text-md);
 	}
 
 	.drag :global(.demo) {

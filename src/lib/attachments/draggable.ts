@@ -1,67 +1,86 @@
 import type { Attachment } from 'svelte/attachments';
 
-interface DraggableOptions {
-	/** Initial offset in px. */
-	x?: number;
-	y?: number;
-	/** Only start dragging when the pointer goes down on an element matching this selector. */
-	handle?: string;
+export interface Position {
+	x: number;
+	y: number;
 }
 
+interface DraggableOptions {
+	/**
+	 * Offset in px, owned by the caller (typically `$state`). The attachment only writes it;
+	 * apply it yourself, e.g. `style:translate="{pos.x}px {pos.y}px"`. That way other controls
+	 * (a "center" button, click-to-move) can move the element too.
+	 */
+	position: Position;
+	/** Called when a pointer drag or a burst of key presses ends. */
+	onmoveend?: (via: 'pointer' | 'keyboard') => void;
+	/** Px per arrow key press; Shift multiplies by 5. */
+	step?: number;
+}
+
+const INTERACTIVE = 'input, select, button, a, textarea, [contenteditable]';
+const HANDLE = '[data-drag-handle]';
+
 /**
- * Lets the user move an element with the pointer by updating its `translate`.
- * Keyboard users can move it with the arrow keys while it is focused (Shift = 10x).
+ * Lets the user move an element by dragging it.
+ *
+ * - Pointer: drag anywhere on the element except other interactive controls. An element
+ *   marked `data-drag-handle` (usually a button) can always start a drag.
+ * - Keyboard: arrow keys move the element while its `data-drag-handle` has focus.
+ *
+ * Dragging alone doesn't satisfy WCAG 2.5.7; pair it with a single-pointer alternative.
  */
 export function draggable({
-	x = 0,
-	y = 0,
-	handle
-}: DraggableOptions = {}): Attachment<HTMLElement> {
+	position,
+	onmoveend,
+	step = 10
+}: DraggableOptions): Attachment<HTMLElement> {
 	return (node) => {
 		let start: { px: number; py: number; x: number; y: number } | undefined;
+		let keyTimer: ReturnType<typeof setTimeout> | undefined;
 
-		const apply = () => (node.style.translate = `${x}px ${y}px`);
-		apply();
 		node.style.touchAction = 'none';
 
 		function down(e: PointerEvent) {
 			if (e.button !== 0) return;
-			if (handle && !(e.target as Element).closest(handle)) return;
-			if ((e.target as Element).closest('input, select, button, a, textarea')) return;
-			start = { px: e.clientX, py: e.clientY, x, y };
+			const target = e.target as Element;
+			if (!target.closest(HANDLE) && target.closest(INTERACTIVE)) return;
+			start = { px: e.clientX, py: e.clientY, x: position.x, y: position.y };
 			node.setPointerCapture(e.pointerId);
 			node.style.cursor = 'grabbing';
 		}
 
 		function move(e: PointerEvent) {
 			if (!start) return;
-			x = start.x + e.clientX - start.px;
-			y = start.y + e.clientY - start.py;
-			apply();
+			position.x = start.x + e.clientX - start.px;
+			position.y = start.y + e.clientY - start.py;
 		}
 
 		function up(e: PointerEvent) {
 			if (!start) return;
+			const moved = position.x !== start.x || position.y !== start.y;
 			start = undefined;
 			node.releasePointerCapture(e.pointerId);
 			node.style.cursor = '';
+			if (moved) onmoveend?.('pointer');
 		}
 
 		function key(e: KeyboardEvent) {
-			if (e.target !== node) return;
-			const step = e.shiftKey ? 10 : 1;
+			if (!(e.target as Element).closest(HANDLE)) return;
+			const s = e.shiftKey ? step * 5 : step;
 			const delta: Record<string, [number, number]> = {
-				ArrowLeft: [-step, 0],
-				ArrowRight: [step, 0],
-				ArrowUp: [0, -step],
-				ArrowDown: [0, step]
+				ArrowLeft: [-s, 0],
+				ArrowRight: [s, 0],
+				ArrowUp: [0, -s],
+				ArrowDown: [0, s]
 			};
 			const d = delta[e.key];
 			if (!d) return;
 			e.preventDefault();
-			x += d[0];
-			y += d[1];
-			apply();
+			position.x += d[0];
+			position.y += d[1];
+			clearTimeout(keyTimer);
+			keyTimer = setTimeout(() => onmoveend?.('keyboard'), 500);
 		}
 
 		node.addEventListener('pointerdown', down);
@@ -71,6 +90,7 @@ export function draggable({
 		node.addEventListener('keydown', key);
 
 		return () => {
+			clearTimeout(keyTimer);
 			node.removeEventListener('pointerdown', down);
 			node.removeEventListener('pointermove', move);
 			node.removeEventListener('pointerup', up);
