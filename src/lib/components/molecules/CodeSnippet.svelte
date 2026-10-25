@@ -14,22 +14,33 @@ Tokens: `--code-bg`, `--code-fg`, `--code-max-height`.
 
 	let { code, class: className }: Props = $props();
 
-	let copied = $state(false);
+	let status = $state<'idle' | 'copied' | 'failed'>('idle');
 	let timer: ReturnType<typeof setTimeout> | undefined;
 
 	async function copy() {
-		await navigator.clipboard.writeText(code);
-		copied = true;
+		try {
+			// navigator.clipboard is missing on insecure origins (e.g. a dev server via LAN IP)
+			await navigator.clipboard.writeText(code);
+			status = 'copied';
+		} catch {
+			status = 'failed';
+		}
 		clearTimeout(timer);
-		timer = setTimeout(() => (copied = false), 1500);
+		timer = setTimeout(() => (status = 'idle'), 2000);
 	}
+
+	const labels = { idle: 'Copy', copied: 'Copied', failed: 'Copy failed' };
+	const announcements = {
+		idle: '',
+		copied: 'Code copied to clipboard.',
+		failed: 'Copying failed.'
+	};
 </script>
 
 <div class={['snippet', className]}>
 	<pre><code>{code}</code></pre>
-	<Button size="sm" variant="ghost" class="copy" onclick={copy}>
-		{copied ? 'Copied' : 'Copy'}
-	</Button>
+	<Button size="sm" variant="ghost" class="copy" onclick={copy}>{labels[status]}</Button>
+	<span class="visually-hidden" role="status">{announcements[status]}</span>
 </div>
 
 <style>

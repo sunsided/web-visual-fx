@@ -31,6 +31,17 @@ Tokens: `--panel-width`, `--panel-bg`, `--panel-blur`, `--panel-border`,
 	}: Props = $props();
 
 	const bodyId = $props.id();
+
+	// Live region text; the region is always rendered so screen readers pick up changes.
+	let status = $state('');
+	let statusTimer: ReturnType<typeof setTimeout> | undefined;
+
+	function reset() {
+		onreset?.();
+		status = 'All settings reset to their defaults.';
+		clearTimeout(statusTimer);
+		statusTimer = setTimeout(() => (status = ''), 3000);
+	}
 </script>
 
 <section class={['panel', className, { collapsed: !open }]} aria-label="{title} controls">
@@ -38,7 +49,7 @@ Tokens: `--panel-width`, `--panel-bg`, `--panel-blur`, `--panel-border`,
 		<h2>{title}</h2>
 		<div class="actions">
 			{#if onreset}
-				<Button size="sm" variant="ghost" onclick={onreset}>Reset</Button>
+				<Button size="sm" variant="ghost" onclick={reset}>Reset</Button>
 			{/if}
 			<Button
 				size="sm"
@@ -60,6 +71,7 @@ Tokens: `--panel-width`, `--panel-bg`, `--panel-blur`, `--panel-border`,
 			</div>
 		{/if}
 	</div>
+	<p class="visually-hidden" role="status">{status}</p>
 </section>
 
 <style>
