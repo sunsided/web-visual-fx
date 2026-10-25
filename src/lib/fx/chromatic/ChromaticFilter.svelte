@@ -9,7 +9,7 @@ Must be rendered inside an `<svg>`; reference it with `filter: url(#id)`.
 <svelte:options namespace="svg" />
 
 <script lang="ts">
-	import { radialMap, radialScales, type ChannelOffsets } from './chromatic';
+	import { radialMap, radialScales, type ChannelOffsets } from './chromatic.js';
 
 	interface Props {
 		id: string;

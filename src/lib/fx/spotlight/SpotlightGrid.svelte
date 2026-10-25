@@ -22,7 +22,7 @@ Tokens: `--spotlight-columns` (min column width), `--spotlight-rest-border`.
 		safeSurfaceAlpha,
 		spotlightDefaults as d,
 		type SpotlightOptions
-	} from './spotlight';
+	} from './spotlight.js';
 
 	type Props = Partial<SpotlightOptions> &
 		Omit<HTMLAttributes<HTMLDivElement>, keyof SpotlightOptions> & {

@@ -9,7 +9,7 @@ Must be rendered inside an `<svg>`; reference it with CSS `filter: url(#id)` on 
 <svelte:options namespace="svg" />
 
 <script lang="ts">
-	import { luminanceMatrix } from '../duotone/duotone';
+	import { luminanceMatrix } from '../duotone/duotone.js';
 	import {
 		bayerTileUrl,
 		discreteTable,
@@ -17,7 +17,7 @@ Must be rendered inside an `<svg>`; reference it with CSS `filter: url(#id)` on 
 		inkTables,
 		quantizeCoefficients,
 		type HalftoneOptions
-	} from './halftone';
+	} from './halftone.js';
 
 	type Props = Partial<
 		Pick<

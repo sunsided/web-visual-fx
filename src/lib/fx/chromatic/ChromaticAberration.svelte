@@ -23,7 +23,7 @@ Tokens: none; size and lay out the wrapper through `class`/`style`.
 		regionPadding,
 		type ChromaticOptions,
 		type Offset
-	} from './chromatic';
+	} from './chromatic.js';
 
 	type Props = Partial<ChromaticOptions> &
 		Omit<HTMLAttributes<HTMLDivElement>, keyof ChromaticOptions> & {

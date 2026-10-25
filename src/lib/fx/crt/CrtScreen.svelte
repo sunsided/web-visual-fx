@@ -23,7 +23,7 @@ Tokens: `--crt-bezel` (color around the curved picture), `--crt-font-size`.
 		ROLLING_BAR_OPACITY,
 		safeFlicker,
 		type CrtOptions
-	} from './crt';
+	} from './crt.js';
 
 	type Props = Partial<CrtOptions> &
 		Omit<HTMLAttributes<HTMLDivElement>, keyof CrtOptions> & {

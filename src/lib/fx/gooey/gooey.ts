@@ -1,4 +1,4 @@
-import { defaultsOf, defineSchema, type Values } from '#lib/params/schema.js';
+import { defaultsOf, defineSchema, type Values } from '../../params/schema.js';
 
 /** Parameters of the goo filter itself; shared by the blob field and the menu. */
 export const gooSchema = defineSchema({

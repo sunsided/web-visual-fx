@@ -1,4 +1,4 @@
-import { defaultsOf, defineSchema, type Values } from '#lib/params/schema.js';
+import { defaultsOf, defineSchema, type Values } from '../../params/schema.js';
 
 export const profiles = ['circle', 'squircle', 'linear'] as const;
 

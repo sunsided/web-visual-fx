@@ -16,7 +16,7 @@ must be generated at that size (see `displacementMap`). Used as `backdrop-filter
 		fringeScales,
 		LIGHT_ELEVATION,
 		specularSurfaceScale
-	} from './liquid-glass';
+	} from './liquid-glass.js';
 
 	interface Props {
 		id: string;

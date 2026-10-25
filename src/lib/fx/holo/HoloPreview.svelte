@@ -4,7 +4,7 @@ Decorative thumbnail of the holographic foil: a small card whose foil drifts in 
 No JavaScript loop; pauses inside `data-motion="paused"` and stands still under reduced motion.
 -->
 <script lang="ts">
-	import { foilBackground } from './holo';
+	import { foilBackground } from './holo.js';
 
 	const foil = foilBackground('stripes', 6, 360);
 </script>

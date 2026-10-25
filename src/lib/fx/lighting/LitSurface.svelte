@@ -25,7 +25,7 @@ Tokens: `--lit-marker-color` (the dot marking the light position).
 		pxToPercent,
 		type LightingOptions,
 		type Point
-	} from './lighting';
+	} from './lighting.js';
 
 	type Props = Partial<LightingOptions> &
 		Omit<HTMLAttributes<HTMLDivElement>, keyof LightingOptions> & {

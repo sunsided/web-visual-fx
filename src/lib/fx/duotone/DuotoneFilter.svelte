@@ -14,7 +14,7 @@ Must be rendered inside an `<svg>`; reference it with CSS `filter: url(#id)` on 
 		stopsOf,
 		tableValues,
 		type DuotoneOptions
-	} from './duotone';
+	} from './duotone.js';
 
 	interface Props extends Partial<DuotoneOptions> {
 		id: string;

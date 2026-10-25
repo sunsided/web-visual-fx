@@ -38,7 +38,7 @@ Tokens: `--holo-width`, `--holo-bg`, `--holo-padding`, `--holo-body-bg`, `--holo
 		type HoloOptions,
 		type Point,
 		type Pose
-	} from './holo';
+	} from './holo.js';
 
 	type Props = Partial<HoloOptions> &
 		Omit<HTMLAttributes<HTMLDivElement>, keyof HoloOptions> & {

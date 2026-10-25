@@ -8,7 +8,7 @@ Must be rendered inside an `<svg>`; reference it with CSS `filter: url(#id)`. `w
 <svelte:options namespace="svg" />
 
 <script lang="ts">
-	import { barrelMapUrl, displacementScale } from './crt';
+	import { barrelMapUrl, displacementScale } from './crt.js';
 
 	interface Props {
 		id: string;

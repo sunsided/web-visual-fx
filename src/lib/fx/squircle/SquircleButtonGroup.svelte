@@ -20,7 +20,7 @@ Tokens: `--button-group-height`, `--button-group-bg`, `--button-group-fg`,
 		cornerShapeCss,
 		easingCss,
 		type ButtonGroupOptions
-	} from './squircle';
+	} from './squircle.js';
 
 	interface Item {
 		value: string;

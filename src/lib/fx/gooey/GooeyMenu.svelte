@@ -20,7 +20,7 @@ Tokens: `--gooey-menu-size` (toggle diameter), `--gooey-menu-item-size`.
 		type GooOptions,
 		type MenuItem,
 		type GooeyMenuOptions
-	} from './gooey';
+	} from './gooey.js';
 
 	type Props = Partial<Pick<GooOptions, 'blur' | 'sharpness' | 'offset' | 'region'>> &
 		Partial<GooeyMenuOptions> &
