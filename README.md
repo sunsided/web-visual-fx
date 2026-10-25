@@ -1,5 +1,9 @@
 # Visual FX
 
+Try it out: https://sunsided.github.io/web-visual-fx/
+
+---
+
 A playground for modern visual effects on the web, built as tokenized, fully configurable
 Svelte components. Two faces, one codebase:
 
