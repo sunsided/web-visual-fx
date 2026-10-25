@@ -7,7 +7,7 @@ import { Meta, ColorPalette, ColorItem } from '@storybook/addon-docs/blocks';
 Three layers, all plain CSS custom properties:
 
 1. **Primitives** (`primitives.css`): raw scales such as `--gray-*`, `--accent-*`, `--space-*`, `--radius-*`, `--text-*`, `--duration-*`. Components never use these directly.
-2. **Semantic** (`semantic.css`): roles such as `--color-surface`, `--color-text-muted`, `--color-accent`, `--focus-ring`. Light/dark is resolved with `light-dark()`; force a scheme with `data-theme="light" | "dark"` on any element.
+2. **Semantic** (`semantic.css`): roles such as `--color-surface`, `--color-text-muted`, `--color-accent`, `--focus-ring-color`. Light/dark is resolved with `light-dark()`; force a scheme with `data-theme="light" | "dark"` on any element.
 3. **Component** tokens, declared by each component with a semantic fallback, e.g. `var(--slider-fill, var(--color-accent))`. Override them on any ancestor (`<div style="--slider-fill: hotpink">`) or as Svelte component props (`<Slider --slider-fill="hotpink" />`).
 
 Re-skin everything by changing `--accent-hue` / `--gray-hue`.

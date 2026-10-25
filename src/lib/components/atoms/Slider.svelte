@@ -44,6 +44,8 @@ Tokens: `--slider-track-height`, `--slider-track`, `--slider-fill`,
 		--_thumb: var(--slider-thumb-size, 14px);
 		--_fill: var(--slider-fill, var(--color-accent));
 		--_track: var(--slider-track, var(--color-control));
+		--_thumb-bg: var(--slider-thumb, var(--color-surface-raised));
+		--_thumb-border: var(--slider-thumb-border, 2px solid var(--_fill));
 
 		appearance: none;
 		inline-size: 100%;
@@ -87,8 +89,8 @@ Tokens: `--slider-track-height`, `--slider-track`, `--slider-fill`,
 		block-size: var(--_thumb);
 		margin-block-start: calc((var(--_track-h) - var(--_thumb)) / 2);
 		border-radius: var(--radius-full);
-		background: var(--slider-thumb, var(--color-surface-raised));
-		border: var(--slider-thumb-border, 2px solid var(--_fill));
+		background: var(--_thumb-bg);
+		border: var(--_thumb-border);
 		box-shadow: var(--shadow-1);
 		transition: scale var(--duration-fast) var(--ease-out);
 	}
@@ -97,8 +99,8 @@ Tokens: `--slider-track-height`, `--slider-track`, `--slider-fill`,
 		inline-size: var(--_thumb);
 		block-size: var(--_thumb);
 		border-radius: var(--radius-full);
-		background: var(--slider-thumb, var(--color-surface-raised));
-		border: var(--slider-thumb-border, 2px solid var(--_fill));
+		background: var(--_thumb-bg);
+		border: var(--_thumb-border);
 		box-shadow: var(--shadow-1);
 		box-sizing: border-box;
 		transition: scale var(--duration-fast) var(--ease-out);
@@ -110,5 +112,26 @@ Tokens: `--slider-track-height`, `--slider-track`, `--slider-fill`,
 
 	.slider:active::-moz-range-thumb {
 		scale: 1.2;
+	}
+
+	/*
+	 * Forced colors (Windows High Contrast) would replace the track backgrounds with the page
+	 * background and make the track disappear. Opt out and paint it with system colors instead.
+	 */
+	@media (forced-colors: active) {
+		.slider {
+			forced-color-adjust: none;
+			--_fill: Highlight;
+			--_track: CanvasText;
+			--_thumb-bg: Canvas;
+			--_thumb-border: 2px solid Highlight;
+		}
+
+		.slider:disabled {
+			--_fill: GrayText;
+			--_track: GrayText;
+			--_thumb-border: 2px solid GrayText;
+			opacity: 1;
+		}
 	}
 </style>

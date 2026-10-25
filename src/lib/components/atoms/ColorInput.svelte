@@ -44,4 +44,12 @@ Tokens: `--color-input-size`, `--color-input-border`.
 		border: none;
 		border-radius: var(--radius-full);
 	}
+
+	/* The swatch *is* the information; keep its real color in forced-colors mode. */
+	@media (forced-colors: active) {
+		.color-input {
+			forced-color-adjust: none;
+			border-color: CanvasText;
+		}
+	}
 </style>

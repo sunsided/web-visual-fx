@@ -59,4 +59,41 @@ Tokens: `--switch-width`, `--switch-height`, `--switch-track`, `--switch-track-o
 		opacity: 0.5;
 		cursor: not-allowed;
 	}
+
+	/*
+	 * Forced colors would flatten track and thumb to the same background color, making the
+	 * switch invisible. Opt out and draw it with system colors: outlined track, solid thumb,
+	 * Highlight when on.
+	 */
+	@media (forced-colors: active) {
+		.switch {
+			forced-color-adjust: none;
+			background: Canvas;
+			/* inset shadow instead of a border, so the thumb geometry stays the same */
+			box-shadow: inset 0 0 0 1px CanvasText;
+		}
+
+		.switch::before {
+			background: CanvasText;
+			box-shadow: none;
+		}
+
+		.switch:checked {
+			background: Highlight;
+			box-shadow: none;
+		}
+
+		.switch:checked::before {
+			background: HighlightText;
+		}
+
+		.switch:disabled {
+			opacity: 1;
+			box-shadow: inset 0 0 0 1px GrayText;
+		}
+
+		.switch:disabled::before {
+			background: GrayText;
+		}
+	}
 </style>

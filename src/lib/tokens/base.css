@@ -56,9 +56,10 @@ textarea {
 	color: inherit;
 }
 
+/* An outline, not a box-shadow: forced-colors mode (Windows High Contrast) removes shadows. */
 :focus-visible {
-	outline: none;
-	box-shadow: var(--focus-ring);
+	outline: var(--focus-ring-width) solid var(--focus-ring-color);
+	outline-offset: var(--focus-ring-offset);
 }
 
 .visually-hidden {

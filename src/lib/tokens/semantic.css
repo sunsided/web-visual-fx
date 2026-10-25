@@ -54,9 +54,6 @@
 	--focus-ring-color: var(--color-accent);
 	--focus-ring-width: 2px;
 	--focus-ring-offset: 2px;
-	--focus-ring:
-		0 0 0 var(--focus-ring-offset) var(--color-bg),
-		0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--focus-ring-color);
 
 	/* Control sizing */
 	--control-height-sm: 1.75rem;
@@ -68,4 +65,11 @@
 	--panel-padding: var(--space-4);
 	--panel-radius: var(--radius-xl);
 	--panel-gap: var(--space-3);
+}
+
+/* Controls that opt out with forced-color-adjust: none would otherwise keep the accent color. */
+@media (forced-colors: active) {
+	:root {
+		--focus-ring-color: Highlight;
+	}
 }
