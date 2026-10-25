@@ -107,7 +107,7 @@
 				tabindex="0"
 				{@attach draggable()}
 			>
-				<GlassPanel {...glass.values} {forceDisplace} class="demo" data-theme="dark">
+				<GlassPanel {...glass.values} {forceDisplace} class="demo">
 					<p class="eyebrow">Drag me</p>
 					<h2>Frosted glass</h2>
 					<p>
@@ -153,7 +153,10 @@
 					inside the panel's border box (clipped to its <code>border-radius</code>).
 				</li>
 				<li>
-					<strong>Tint.</strong> A translucent <code>background</code> color on the panel itself.
+					<strong>Tint.</strong> A translucent <code>background</code> color on the panel itself. It also
+					decides the text color (dark on light tints, light on dark ones), and its opacity is what keeps
+					that text readable: the default of 0.35 is the lowest value that keeps body text at 4.5:1 or
+					better over every backdrop on this page.
 				</li>
 				<li>
 					<strong>Grain.</strong> A faint noise layer, the same component as on the
@@ -274,12 +277,12 @@
 	}
 
 	.drag :global(.demo) {
-		color: var(--color-text);
 		--glass-padding: var(--space-8);
 	}
 
+	/* Derived from the glass's automatic text color, so it works on light and dark tints. */
 	.drag .eyebrow {
-		color: oklch(100% 0 0 / 0.7);
+		color: color-mix(in oklch, currentColor 80%, transparent);
 		font-size: var(--text-xs);
 		font-weight: var(--weight-semibold);
 		letter-spacing: var(--tracking-wide);
@@ -292,7 +295,7 @@
 	}
 
 	.drag p {
-		color: oklch(100% 0 0 / 0.85);
+		color: color-mix(in oklch, currentColor 90%, transparent);
 	}
 
 	.support-note {

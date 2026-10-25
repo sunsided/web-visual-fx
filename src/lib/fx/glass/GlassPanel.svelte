@@ -5,14 +5,16 @@ Frosted glass surface: backdrop blur + turbulence displacement + grain + thin li
 Every visual parameter is a prop (see `glassSchema` for ranges and defaults).
 Layout/typography of the content is up to you: pass `class`/`style` or wrap the children.
 
-Tokens: `--glass-padding`, `--glass-color` (text color inside).
+Text color defaults to dark on light tints and light on dark tints (see `textColorFor`).
+
+Tokens: `--glass-padding`, `--glass-color` (overrides the automatic text color).
 -->
 <script lang="ts">
 	import { onMount, type Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import NoiseLayer from '../noise/NoiseLayer.svelte';
 	import DisplacementFilter from './DisplacementFilter.svelte';
-	import { glassDefaults as d, hexToRgba, type GlassOptions } from './glass';
+	import { glassDefaults as d, hexToRgba, textColorFor, type GlassOptions } from './glass';
 	import { supportsBackdropSvgFilter } from './support';
 
 	type Props = Partial<GlassOptions> &
@@ -78,6 +80,7 @@ Tokens: `--glass-padding`, `--glass-color` (text color inside).
 	style:--_rim-opacity={rimOpacity}
 	style:--_rim-angle="{rimAngle}deg"
 	style:--_glow={innerGlow}
+	data-text={textColorFor(tint)}
 	{...rest}
 >
 	{#if canDisplace && displace}
@@ -112,13 +115,21 @@ Tokens: `--glass-padding`, `--glass-color` (text color inside).
 		isolation: isolate;
 		border-radius: var(--_radius);
 		background: var(--_tint);
-		color: var(--glass-color, inherit);
+		color: var(--glass-color, var(--_auto-color));
 		-webkit-backdrop-filter: var(--_backdrop);
 		backdrop-filter: var(--_backdrop);
 		box-shadow:
 			0 calc(30px * var(--_shadow)) calc(60px * var(--_shadow))
 				oklch(0% 0 0 / calc(var(--_shadow) * 0.6)),
 			inset 0 0 calc(40px * var(--_glow)) oklch(100% 0 0 / calc(var(--_glow) * 0.5));
+	}
+
+	.glass[data-text='dark'] {
+		--_auto-color: oklch(18% 0.02 285);
+	}
+
+	.glass[data-text='light'] {
+		--_auto-color: oklch(100% 0 0);
 	}
 
 	/* Thin rim: a gradient border lit from --_rim-angle, cut out with a mask. */

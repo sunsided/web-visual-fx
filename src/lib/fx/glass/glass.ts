@@ -15,11 +15,14 @@ export const glassSchema = defineSchema({
 	tintOpacity: {
 		kind: 'range',
 		label: 'Tint opacity',
-		default: 0.08,
+		// Lowest value where the automatic text color keeps ≥ 4.5:1 over all demo backdrops
+		default: 0.35,
 		min: 0,
 		max: 0.8,
 		step: 0.01,
-		group: 'Surface'
+		group: 'Surface',
+		description:
+			'Also what keeps text readable: the text color follows the tint (dark on light, light on dark), and the tint has to be opaque enough to separate it from the backdrop.'
 	},
 	shadow: {
 		kind: 'range',
@@ -174,4 +177,24 @@ export const glassDefaults: GlassOptions = defaultsOf(glassSchema);
 export function hexToRgba(hex: string, alpha: number): string {
 	const n = Number.parseInt(hex.slice(1), 16);
 	return `rgb(${(n >> 16) & 255} ${(n >> 8) & 255} ${n & 255} / ${alpha})`;
+}
+
+/** WCAG relative luminance of a `#rrggbb` color. */
+export function relativeLuminance(hex: string): number {
+	const n = Number.parseInt(hex.slice(1), 16);
+	const channel = (c: number) => {
+		const v = c / 255;
+		return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+	};
+	return (
+		0.2126 * channel((n >> 16) & 255) + 0.7152 * channel((n >> 8) & 255) + 0.0722 * channel(n & 255)
+	);
+}
+
+/**
+ * Text color that contrasts with the tint: dark on light glass, light on dark glass.
+ * 0.18 is the luminance where black and white text have equal contrast.
+ */
+export function textColorFor(tint: string): 'dark' | 'light' {
+	return relativeLuminance(tint) > 0.18 ? 'dark' : 'light';
 }
