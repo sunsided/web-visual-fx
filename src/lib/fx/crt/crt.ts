@@ -1,6 +1,6 @@
-import { defaultsOf, defineSchema, type Values } from '#lib/params/schema.js';
-import { srgbToLinear } from '../duotone/duotone';
-import { relativeLuminance } from '../glass/glass';
+import { defaultsOf, defineSchema, type Values } from '../../params/schema.js';
+import { srgbToLinear } from '../duotone/duotone.js';
+import { relativeLuminance } from '../glass/glass.js';
 
 export const crtSchema = defineSchema({
 	phosphor: {

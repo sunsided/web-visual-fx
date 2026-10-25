@@ -26,7 +26,7 @@ the art and below the content).
 		paletteOf,
 		saturated,
 		type AuroraOptions
-	} from './aurora';
+	} from './aurora.js';
 
 	type Props = Partial<AuroraOptions> &
 		Omit<HTMLAttributes<HTMLDivElement>, keyof AuroraOptions> & {

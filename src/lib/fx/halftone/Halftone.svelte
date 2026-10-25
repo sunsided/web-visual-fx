@@ -22,7 +22,7 @@ clips its content; size it with `class`/`style`.
 		sourceBlur,
 		thresholdContrast,
 		type HalftoneOptions
-	} from './halftone';
+	} from './halftone.js';
 
 	type Props = Partial<HalftoneOptions> &
 		Omit<HTMLAttributes<HTMLDivElement>, keyof HalftoneOptions> & {

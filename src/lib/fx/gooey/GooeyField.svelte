@@ -13,7 +13,7 @@ Tokens: `--gooey-bg` (background behind the goo, outside the filter).
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import GooFilter from './GooFilter.svelte';
-	import { gooeyDefaults as d, makeBlobs, type GooeyOptions } from './gooey';
+	import { gooeyDefaults as d, makeBlobs, type GooeyOptions } from './gooey.js';
 
 	type Props = Partial<GooeyOptions> &
 		Omit<HTMLAttributes<HTMLDivElement>, keyof GooeyOptions> & {

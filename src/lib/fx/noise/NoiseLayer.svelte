@@ -9,7 +9,7 @@ Tokens: `--noise-opacity`, `--noise-blend-mode` (override the props).
 	import { MediaQuery } from 'svelte/reactivity';
 	import type { SVGAttributes } from 'svelte/elements';
 	import NoiseFilter from './NoiseFilter.svelte';
-	import { maxSafeFps, noiseDefaults as d, type NoiseOptions } from './noise';
+	import { maxSafeFps, noiseDefaults as d, type NoiseOptions } from './noise.js';
 
 	type Props = Partial<NoiseOptions> & Omit<SVGAttributes<SVGSVGElement>, keyof NoiseOptions>;
 

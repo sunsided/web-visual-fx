@@ -1,4 +1,4 @@
-import { defaultsOf, defineSchema, type Values } from '#lib/params/schema.js';
+import { defaultsOf, defineSchema, type Values } from '../../params/schema.js';
 
 export const lightTypes = ['point', 'spot', 'distant'] as const;
 export type LightType = (typeof lightTypes)[number];

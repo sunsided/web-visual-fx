@@ -14,8 +14,8 @@ Tokens: `--glass-padding`, `--glass-color` (overrides the automatic text color).
 	import type { HTMLAttributes } from 'svelte/elements';
 	import NoiseLayer from '../noise/NoiseLayer.svelte';
 	import DisplacementFilter from './DisplacementFilter.svelte';
-	import { glassDefaults as d, hexToRgba, textColorFor, type GlassOptions } from './glass';
-	import { supportsBackdropSvgFilter } from './support';
+	import { glassDefaults as d, hexToRgba, textColorFor, type GlassOptions } from './glass.js';
+	import { supportsBackdropSvgFilter } from './support.js';
 
 	type Props = Partial<GlassOptions> &
 		Omit<HTMLAttributes<HTMLDivElement>, keyof GlassOptions> & {

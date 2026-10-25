@@ -20,8 +20,8 @@ Tokens: `--squircle-bg`, `--squircle-color`, `--squircle-padding`.
 		squircleDefaults as d,
 		superellipsePath,
 		type SquircleOptions
-	} from './squircle';
-	import { supportsCornerShape } from './support';
+	} from './squircle.js';
+	import { supportsCornerShape } from './support.js';
 
 	type Props = Partial<SquircleOptions> &
 		Omit<HTMLAttributes<HTMLDivElement>, keyof SquircleOptions> & {

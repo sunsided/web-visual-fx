@@ -1,4 +1,4 @@
-import { defaultsOf, defineSchema, type Values } from '#lib/params/schema.js';
+import { defaultsOf, defineSchema, type Values } from '../../params/schema.js';
 
 export const colorSpaces = ['sRGB', 'linearRGB'] as const;
 export type ColorSpace = (typeof colorSpaces)[number];

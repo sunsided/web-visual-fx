@@ -6,7 +6,7 @@ Must be rendered inside an `<svg>`; reference it with `filter="url(#id)"`.
 <svelte:options namespace="svg" />
 
 <script lang="ts">
-	import { turbulenceDefaults as d, type TurbulenceOptions } from './noise';
+	import { turbulenceDefaults as d, type TurbulenceOptions } from './noise.js';
 
 	interface Props extends Partial<TurbulenceOptions> {
 		id: string;

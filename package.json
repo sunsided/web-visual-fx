@@ -1,15 +1,90 @@
 {
-	"name": "web-visual-fx",
-	"private": true,
+	"name": "@sunsided/web-visual-fx",
 	"version": "1.0.0",
+	"description": "Modern visual effects for the web (liquid and frosted glass, SVG filters, holographic foil, squircles and more) as Svelte components and framework-agnostic custom elements.",
+	"license": "EUPL-1.2 OR MIT OR Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sunsided/web-visual-fx.git"
+	},
+	"homepage": "https://sunsided.github.io/web-visual-fx/",
+	"keywords": [
+		"svelte",
+		"web-components",
+		"custom-elements",
+		"visual-effects",
+		"svg-filters",
+		"glassmorphism",
+		"liquid-glass",
+		"squircle",
+		"css"
+	],
+	"files": [
+		"dist",
+		"LICENSE-*",
+		"!dist/**/*.spec.*",
+		"!dist/**/*.stories.*",
+		"!dist/**/*Preview.svelte*",
+		"!dist/components",
+		"!dist/attachments",
+		"!dist/assets",
+		"!dist/fx/registry.*",
+		"!dist/tokens/base.css",
+		"!dist/tokens/index.css",
+		"!dist/tokens/*.mdx",
+		"!dist/params/state.svelte.*"
+	],
+	"sideEffects": [
+		"**/*.css",
+		"./dist/elements/**"
+	],
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./svelte": {
+			"types": "./dist/svelte.d.ts",
+			"svelte": "./dist/svelte.js",
+			"default": "./dist/svelte.js"
+		},
+		"./elements": {
+			"types": "./dist/elements/index.d.ts",
+			"default": "./dist/elements/index.js"
+		},
+		"./elements/*": {
+			"types": "./dist/elements/index.d.ts",
+			"default": "./dist/elements/*.js"
+		},
+		"./elements/react": {
+			"types": "./dist/elements/react.d.ts"
+		},
+		"./tokens.css": "./dist/tokens/tokens.css",
+		"./package.json": "./package.json"
+	},
+	"peerDependencies": {
+		"svelte": "^5.0.0"
+	},
+	"peerDependenciesMeta": {
+		"svelte": {
+			"optional": true
+		}
+	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"package": "svelte-kit sync && svelte-package && vite build -c vite.elements.config.ts && node scripts/generate-elements.js --declarations dist/elements && publint --strict",
+		"prepublishOnly": "yarn package",
+		"elements:generate": "node scripts/generate-elements.js",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --compiler-warnings options_missing_custom_element:ignore",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --compiler-warnings options_missing_custom_element:ignore --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:unit": "vitest",
@@ -26,6 +101,7 @@
 		"@storybook/sveltekit": "^10.6.3",
 		"@sveltejs/adapter-static": "^4.0.0",
 		"@sveltejs/kit": "^3.1.0",
+		"@sveltejs/package": "3.0.1",
 		"@sveltejs/vite-plugin-svelte": "^7.3.1",
 		"@types/node": "^24.19.2",
 		"eslint": "^10.13.0",
@@ -35,6 +111,7 @@
 		"globals": "^17.13.0",
 		"prettier": "^3.9.10",
 		"prettier-plugin-svelte": "^4.1.1",
+		"publint": "0.3.25",
 		"storybook": "^10.6.3",
 		"svelte": "^5.57.2",
 		"svelte-check": "^4.7.7",
@@ -47,7 +124,6 @@
 		"#lib": "./src/lib/index.js",
 		"#lib/*": "./src/lib/*"
 	},
-	"description": "Playground for modern visual effects on the web",
 	"packageManager": "yarn@4.18.1",
 	"engines": {
 		"node": ">=22.17"

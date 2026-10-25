@@ -7,7 +7,7 @@ Must be rendered inside an `<svg>`; reference it with `filter: url(#id)` on a co
 <svelte:options namespace="svg" />
 
 <script lang="ts">
-	import { filterRegion, gooDefaults as d, gooMatrix, type GooOptions } from './gooey';
+	import { filterRegion, gooDefaults as d, gooMatrix, type GooOptions } from './gooey.js';
 
 	interface Props extends Partial<GooOptions> {
 		id: string;

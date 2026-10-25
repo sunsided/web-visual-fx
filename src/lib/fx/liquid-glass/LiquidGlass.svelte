@@ -16,14 +16,14 @@ Tokens: `--liquid-glass-padding`.
 <script lang="ts">
 	import { onMount, type Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import { hexToRgba } from '../glass/glass';
-	import { supportsBackdropSvgFilter } from '../glass/support';
+	import { hexToRgba } from '../glass/glass.js';
+	import { supportsBackdropSvgFilter } from '../glass/support.js';
 	import LensFilter from './LensFilter.svelte';
 	import {
 		displacementMap,
 		liquidGlassDefaults as d,
 		type LiquidGlassOptions
-	} from './liquid-glass';
+	} from './liquid-glass.js';
 
 	type Props = Partial<LiquidGlassOptions> &
 		Omit<HTMLAttributes<HTMLDivElement>, keyof LiquidGlassOptions> & {

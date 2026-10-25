@@ -10,7 +10,7 @@ plain block; size and layout it with `class`/`style`.
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import DuotoneFilter from './DuotoneFilter.svelte';
-	import { duotoneDefaults as d, type DuotoneOptions } from './duotone';
+	import { duotoneDefaults as d, type DuotoneOptions } from './duotone.js';
 
 	type Props = Partial<DuotoneOptions> &
 		Omit<HTMLAttributes<HTMLDivElement>, keyof DuotoneOptions> & {

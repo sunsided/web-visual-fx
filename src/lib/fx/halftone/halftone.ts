@@ -1,4 +1,4 @@
-import { defaultsOf, defineSchema, type Values } from '#lib/params/schema.js';
+import { defaultsOf, defineSchema, type Values } from '../../params/schema.js';
 
 export const halftoneModes = ['halftone', 'dither'] as const;
 export type HalftoneMode = (typeof halftoneModes)[number];

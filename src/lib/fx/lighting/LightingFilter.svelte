@@ -11,7 +11,12 @@ only its alpha is used (as the "shape" relief).
 <svelte:options namespace="svg" />
 
 <script lang="ts">
-	import { lightingDefaults as d, toDistant, type LightingOptions, type Point } from './lighting';
+	import {
+		lightingDefaults as d,
+		toDistant,
+		type LightingOptions,
+		type Point
+	} from './lighting.js';
 
 	type Options = Pick<
 		LightingOptions,

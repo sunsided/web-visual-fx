@@ -1,5 +1,5 @@
-import { defaultsOf, defineSchema, type Values } from '#lib/params/schema.js';
-import { relativeLuminance } from '../glass/glass';
+import { defaultsOf, defineSchema, type Values } from '../../params/schema.js';
+import { relativeLuminance } from '../glass/glass.js';
 
 export const spotlightSchema = defineSchema({
 	glowRadius: {
