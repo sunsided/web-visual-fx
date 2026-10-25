@@ -79,3 +79,16 @@ builds the site with `BASE_PATH` taken from `actions/configure-pages`, builds St
 `build/storybook`, and deploys to GitHub Pages. Pull requests run CI only.
 
 In the repository settings, set **Pages → Source** to **GitHub Actions**.
+
+## Releases
+
+Push a semver tag to publish a GitHub release:
+
+```sh
+git tag v0.1.0 && git push origin v0.1.0
+```
+
+`.github/workflows/release.yml` runs CI, builds the site and Storybook into
+`web-visual-fx-<tag>.tar.gz` (relative paths, so it works from any directory), and creates
+the release with GitHub-generated notes and the archive attached. Tags with a suffix such
+as `v0.2.0-rc.1` become prereleases.
