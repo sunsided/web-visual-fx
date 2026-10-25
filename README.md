@@ -10,10 +10,21 @@ Svelte components. Two faces, one codebase:
 
 Effects so far:
 
-| Effect        | Techniques                                                                   |
-| ------------- | ---------------------------------------------------------------------------- |
-| Noise         | `feTurbulence`, `feColorMatrix`, `feComponentTransfer`, `mix-blend-mode`     |
-| Frosted glass | `backdrop-filter`, `feTurbulence` → `feDisplacementMap`, masked gradient rim |
+| Effect               | Techniques                                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------- |
+| Noise                | `feTurbulence`, `feColorMatrix`, `feComponentTransfer`, `mix-blend-mode`                          |
+| Frosted glass        | `backdrop-filter`, `feTurbulence` → `feDisplacementMap`, masked gradient rim                      |
+| Liquid glass         | SDF-generated map via `feImage` → `feDisplacementMap`, `feSpecularLighting`                       |
+| Chromatic aberration | `feColorMatrix` channel split, `feOffset`, `feBlend`, radial `feDisplacementMap`                  |
+| Gooey                | `feGaussianBlur` → `feColorMatrix` alpha threshold, `feComposite`                                 |
+| Lighting             | `feDiffuseLighting`, `feSpecularLighting`, `fePointLight`, `feTurbulence` bump map                |
+| Duotone              | `feColorMatrix` luminance, `feComponentTransfer` table, `feComposite` mix                         |
+| Halftone             | CSS dot gradients + `contrast()` threshold; `feImage`/`feTile` Bayer dither + discrete transfer   |
+| CRT                  | gradient scanlines and mask, `feDisplacementMap` barrel with a generated map, blur + screen bloom |
+| Holographic foil     | `perspective` tilt, pointer custom properties, `mix-blend-mode`, `background-blend-mode`          |
+| Spotlight cards      | pointer-tracked `radial-gradient`, `mask-composite: exclude`, `ResizeObserver`                    |
+| Aurora               | `@property`-registered colors/angles, `cos()`/`sin()`, layered `radial-gradient`                  |
+| Squircles            | `corner-shape` / `superellipse()`, `linear()` spring easing, `clip-path: path()` fallback         |
 
 > Backdrop displacement uses `backdrop-filter: url(#filter)`, which only renders in Chromium-based
 > browsers. Firefox drops the whole backdrop filter (blur included) when the chain contains
@@ -48,6 +59,8 @@ src/lib/
   fx/
     noise/       noise.ts (schema), NoiseFilter (SVG <filter>), NoiseLayer
     glass/       glass.ts (schema), DisplacementFilter (SVG <filter>), GlassPanel
+    …/           one folder per effect: schema + specs, filter/component(s), Preview, stories
+  fx/registry.ts every effect listed on the index
 src/routes/      index + one page per effect
 ```
 
