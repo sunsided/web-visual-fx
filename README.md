@@ -37,7 +37,7 @@ Effects so far:
 
 ## Using the package
 
-The effects are published as `@sunsided/web-visual-fx` on GitHub Packages, in three flavors:
+The effects are published as `@sunsided/web-visual-fx` on npm (and GitHub Packages), in three flavors:
 
 | Entry                              | What                                                         | For                                |
 | ---------------------------------- | ------------------------------------------------------------ | ---------------------------------- |
@@ -45,16 +45,16 @@ The effects are published as `@sunsided/web-visual-fx` on GitHub Packages, in th
 | `@sunsided/web-visual-fx/elements` | Custom elements (`<vfx-glass>` …), prebuilt                  | React 19, Vue, Angular, plain HTML |
 | `@sunsided/web-visual-fx`          | Schemas, defaults and pure helpers, one namespace per effect | Anything                           |
 
-GitHub Packages needs a token to install, even for public packages. Create a personal
-access token (classic) with `read:packages`, then add to your project's `.npmrc`:
+```sh
+npm install @sunsided/web-visual-fx
+```
+
+Tagged releases are also published to GitHub Packages, which needs a token even for public packages: a
+personal access token (classic) with `read:packages`, and in `.npmrc`:
 
 ```ini
 @sunsided:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-
-```sh
-npm install @sunsided/web-visual-fx
 ```
 
 Svelte is an optional peer dependency: only the `/svelte` entry needs it. The elements bundle
@@ -219,7 +219,8 @@ git tag v1.1.0 && git push origin v1.1.0
 `.github/workflows/release.yml` runs CI, checks that the tag matches `package.json`, builds
 the site and Storybook into `web-visual-fx-<tag>.tar.gz` (relative paths, so it works from any
 directory), and creates the release with GitHub-generated notes and the archive attached. It
-also builds the npm package and publishes it to GitHub Packages. Tags with a suffix such as
+also builds the npm package and publishes it to GitHub Packages and, via trusted publishing
+(OIDC, no token), to npmjs.com. Tags with a suffix such as
 `v1.2.0-rc.1` become prereleases and are published under the `next` dist-tag.
 
 ## License

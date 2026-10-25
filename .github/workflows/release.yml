@@ -2,7 +2,7 @@ name: Release
 
 # Push a semver tag (v1.2.3, or v1.2.3-rc.1 for a prerelease) to create a GitHub release with
 # generated notes and the built site + Storybook attached, and to publish the npm package to
-# GitHub Packages. The tag must match the version in package.json.
+# GitHub Packages and npmjs.com. The tag must match the version in package.json.
 on:
   push:
     tags:
@@ -148,6 +148,50 @@ jobs:
             exit 0
           fi
           flags=(--ignore-scripts)
+          # Prereleases don't become `latest`.
+          if [[ "$TAG" == *-* ]]; then flags+=(--tag next); fi
+          npm publish package.tgz "${flags[@]}"
+
+  publish-npm:
+    name: Publish to npmjs.com
+    # After the GitHub release, so a failed release doesn't leave a published package behind.
+    needs: [build, release]
+    runs-on: ubuntu-latest
+    # Trusted publishing: npm exchanges the workflow's OIDC token, no secret needed. Configure it
+    # on npmjs.com under the package's settings (repository sunsided/web-visual-fx, workflow
+    # release.yml). Publishes from the tarball built above; lifecycle scripts are skipped.
+    permissions:
+      id-token: write
+    steps:
+      - name: Download package
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: npm-package
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Publish
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          # Trusted publishing needs npm 11.5.1 or newer.
+          npm_version="$(npm --version)"
+          if [[ "$(printf '%s\n' 11.5.1 "$npm_version" | sort -V | head -n1)" != 11.5.1 ]]; then
+            echo "::error::npm $npm_version is too old for trusted publishing (needs 11.5.1+)"
+            exit 1
+          fi
+          # Re-runs: a version can only be published once.
+          version="${TAG#v}"
+          if npm view "@sunsided/web-visual-fx@${version}" version >/dev/null 2>&1; then
+            echo "::notice::@sunsided/web-visual-fx@${version} is already on npmjs.com"
+            exit 0
+          fi
+          flags=(--ignore-scripts --access public)
           # Prereleases don't become `latest`.
           if [[ "$TAG" == *-* ]]; then flags+=(--tag next); fi
           npm publish package.tgz "${flags[@]}"
