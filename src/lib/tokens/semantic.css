@@ -1,0 +1,71 @@
+/*
+ * Semantic tokens: roles, not values. Components consume these (usually as
+ * fallbacks for their own component-level tokens, e.g. `--slider-fill`).
+ *
+ * Theming uses `light-dark()`, driven by `color-scheme`. The default follows
+ * the OS; set `data-theme="light" | "dark"` on any element to force it.
+ */
+:root {
+	color-scheme: light dark;
+}
+
+[data-theme='light'] {
+	color-scheme: light;
+}
+
+[data-theme='dark'] {
+	color-scheme: dark;
+}
+
+/*
+ * Custom properties are substituted where they are used, so `light-dark()`
+ * resolves against the consuming element's `color-scheme`. Declaring once on
+ * :root is enough for nested `data-theme` scopes to work.
+ */
+:root {
+	/* Surfaces */
+	--color-bg: light-dark(var(--gray-1), var(--gray-12));
+	--color-surface: light-dark(var(--gray-0), var(--gray-11));
+	--color-surface-raised: light-dark(white, var(--gray-10));
+	--color-surface-sunken: light-dark(var(--gray-2), oklch(10% 0.01 var(--gray-hue)));
+	--color-overlay: light-dark(oklch(100% 0 0 / 0.6), oklch(15% 0.01 var(--gray-hue) / 0.6));
+
+	/* Content */
+	--color-text: light-dark(var(--gray-11), var(--gray-1));
+	--color-text-muted: light-dark(var(--gray-7), var(--gray-5));
+	--color-text-subtle: light-dark(var(--gray-6), var(--gray-6));
+	--color-text-inverse: light-dark(var(--gray-0), var(--gray-12));
+
+	/* Lines */
+	--color-border: light-dark(var(--gray-3), var(--gray-9));
+	--color-border-strong: light-dark(var(--gray-4), var(--gray-8));
+
+	/* Interaction */
+	--color-accent: light-dark(var(--accent-9), var(--accent-7));
+	--color-accent-hover: light-dark(var(--accent-11), var(--accent-5));
+	--color-accent-subtle: light-dark(var(--accent-3), oklch(30% 0.08 var(--accent-hue)));
+	--color-accent-solid: var(--accent-9);
+	--color-accent-solid-hover: var(--accent-11);
+	--color-on-accent: white;
+	--color-control: light-dark(var(--gray-3), var(--gray-9));
+	--color-control-hover: light-dark(var(--gray-4), var(--gray-8));
+
+	/* Focus */
+	--focus-ring-color: var(--color-accent);
+	--focus-ring-width: 2px;
+	--focus-ring-offset: 2px;
+	--focus-ring:
+		0 0 0 var(--focus-ring-offset) var(--color-bg),
+		0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--focus-ring-color);
+
+	/* Control sizing */
+	--control-height-sm: 1.75rem;
+	--control-height-md: 2.25rem;
+	--control-radius: var(--radius-md);
+	--control-font-size: var(--text-sm);
+
+	/* Panels */
+	--panel-padding: var(--space-4);
+	--panel-radius: var(--radius-xl);
+	--panel-gap: var(--space-3);
+}

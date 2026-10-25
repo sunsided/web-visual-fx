@@ -1,0 +1,166 @@
+# Visual FX playground: SvelteKit site + Storybook, deployed together to GitHub Pages.
+# This project uses yarn (via corepack), not npm or pnpm.
+# Local overrides go in Taskfile.yaml (gitignored).
+# https://taskfile.dev
+version: '3'
+
+vars:
+  ACTIONLINT_VERSION: v1.7.12
+  ZIZMOR_VERSION: 1.31.1
+  # Sub-path the site is served from, e.g. /web-visual-fx on GitHub Pages; empty for root.
+  BASE_PATH: '{{ .BASE_PATH | default "" }}'
+
+env:
+  COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list --sort=none
+    silent: true
+
+  install:
+    desc: Install dependencies
+    aliases: [i]
+    preconditions: &yarn
+      - sh: command -v yarn
+        msg: 'yarn not found — install Node.js 24 and run: corepack enable'
+    sources: [package.json, yarn.lock, .yarnrc.yml]
+    generates: [node_modules/.yarn-state.yml]
+    cmds:
+      - yarn install --immutable
+
+  dev:
+    desc: Start the SvelteKit dev server (playground pages)
+    deps: [install]
+    preconditions: *yarn
+    cmds:
+      - yarn dev {{.CLI_ARGS}}
+
+  storybook:
+    desc: Start Storybook (component library) on http://localhost:6006
+    aliases: [sb]
+    deps: [install]
+    preconditions: *yarn
+    cmds:
+      - yarn storybook {{.CLI_ARGS}}
+
+  build:
+    desc: Build the site and Storybook into build/ (Storybook lands in build/storybook)
+    deps: [install]
+    preconditions: *yarn
+    env:
+      BASE_PATH: '{{.BASE_PATH}}'
+    cmds:
+      # Order matters: the SvelteKit build empties build/ first.
+      - yarn build
+      - yarn build-storybook
+
+  build:site:
+    desc: Build only the SvelteKit site into build/
+    deps: [install]
+    preconditions: *yarn
+    env:
+      BASE_PATH: '{{.BASE_PATH}}'
+    cmds:
+      - yarn build
+
+  preview:
+    desc: Preview the production site build (without Storybook)
+    deps: [build:site]
+    preconditions: *yarn
+    cmds:
+      - yarn preview {{.CLI_ARGS}}
+
+  test:
+    desc: Run unit tests
+    deps: [install]
+    preconditions: *yarn
+    cmds:
+      - yarn test {{.CLI_ARGS}}
+
+  test:watch:
+    desc: Run unit tests in watch mode
+    deps: [install]
+    preconditions: *yarn
+    cmds:
+      - yarn test:unit {{.CLI_ARGS}}
+
+  fmt:
+    desc: Format all files with Prettier
+    aliases: [format]
+    deps: [install]
+    preconditions: *yarn
+    cmds:
+      - yarn format
+
+  lint:
+    desc: Check formatting and lint with ESLint (read-only)
+    deps: [install]
+    preconditions: *yarn
+    cmds:
+      - yarn lint
+
+  lint:fix:
+    desc: Auto-fix lint issues and format
+    aliases: [fix]
+    deps: [install]
+    preconditions: *yarn
+    cmds:
+      - yarn lint:fix
+
+  lint:actions:
+    desc: Lint GitHub Actions workflows with actionlint and zizmor
+    aliases: [lint:gha]
+    cmds:
+      - task: lint:actionlint
+      - task: lint:zizmor
+
+  lint:actionlint:
+    internal: true
+    preconditions:
+      - sh: command -v actionlint || command -v go
+        msg: 'actionlint not found — install it (https://github.com/rhysd/actionlint) or install Go to run it via `go run`'
+    cmds:
+      - |
+        if command -v actionlint >/dev/null; then actionlint
+        else go run github.com/rhysd/actionlint/cmd/actionlint@{{.ACTIONLINT_VERSION}}
+        fi
+
+  lint:zizmor:
+    internal: true
+    preconditions:
+      - sh: command -v zizmor || command -v uvx
+        msg: 'zizmor not found — install it (https://docs.zizmor.sh) or install uv to run it via uvx'
+    cmds:
+      - |
+        if command -v zizmor >/dev/null; then zizmor --offline .github/workflows
+        else uvx zizmor@{{.ZIZMOR_VERSION}} --offline .github/workflows
+        fi
+
+  typecheck:
+    desc: Type-check Svelte and TypeScript sources
+    deps: [install]
+    preconditions: *yarn
+    cmds:
+      - yarn check
+
+  check:
+    desc: All static checks (format, lint, types, workflows)
+    cmds:
+      - task: lint
+      - task: typecheck
+      - task: lint:actions
+
+  ci:
+    desc: Full CI sequence (checks, tests, build)
+    cmds:
+      - task: check
+      - task: test
+      - task: build
+
+  clean:
+    desc: Remove build output and caches
+    cmds:
+      - rm -rf build .svelte-kit storybook-static node_modules/.vite

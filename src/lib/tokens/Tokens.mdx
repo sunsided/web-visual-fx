@@ -1,0 +1,67 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundations/Tokens" />
+
+# Design tokens
+
+Three layers, all plain CSS custom properties:
+
+1. **Primitives** (`primitives.css`): raw scales such as `--gray-*`, `--accent-*`, `--space-*`, `--radius-*`, `--text-*`, `--duration-*`. Components never use these directly.
+2. **Semantic** (`semantic.css`): roles such as `--color-surface`, `--color-text-muted`, `--color-accent`, `--focus-ring`. Light/dark is resolved with `light-dark()`; force a scheme with `data-theme="light" | "dark"` on any element.
+3. **Component** tokens, declared by each component with a semantic fallback, e.g. `var(--slider-fill, var(--color-accent))`. Override them on any ancestor (`<div style="--slider-fill: hotpink">`) or as Svelte component props (`<Slider --slider-fill="hotpink" />`).
+
+Re-skin everything by changing `--accent-hue` / `--gray-hue`.
+
+## Semantic colors
+
+<ColorPalette>
+	<ColorItem
+		title="Surfaces"
+		subtitle="--color-bg / surface / raised / sunken"
+		colors={{
+			bg: 'var(--color-bg)',
+			surface: 'var(--color-surface)',
+			raised: 'var(--color-surface-raised)',
+			sunken: 'var(--color-surface-sunken)'
+		}}
+	/>
+	<ColorItem
+		title="Content"
+		subtitle="--color-text / muted / subtle"
+		colors={{
+			text: 'var(--color-text)',
+			muted: 'var(--color-text-muted)',
+			subtle: 'var(--color-text-subtle)'
+		}}
+	/>
+	<ColorItem
+		title="Interaction"
+		subtitle="--color-accent / hover / subtle, --color-control"
+		colors={{
+			accent: 'var(--color-accent)',
+			hover: 'var(--color-accent-hover)',
+			subtle: 'var(--color-accent-subtle)',
+			control: 'var(--color-control)'
+		}}
+	/>
+	<ColorItem
+		title="Lines"
+		subtitle="--color-border / strong"
+		colors={{ border: 'var(--color-border)', strong: 'var(--color-border-strong)' }}
+	/>
+</ColorPalette>
+
+## Primitive scales
+
+<ColorPalette>
+	<ColorItem
+		title="Gray"
+		subtitle="--gray-0 … --gray-12"
+		colors={Object.fromEntries(Array.from({ length: 13 }, (_, i) => [i, `var(--gray-${i})`]))}
+	/>
+	<ColorItem
+		title="Accent"
+		subtitle="--accent-3 … --accent-11"
+		colors={Object.fromEntries([3, 5, 7, 9, 11].map((i) => [i, `var(--accent-${i})`]))}
+	/>
+</ColorPalette>

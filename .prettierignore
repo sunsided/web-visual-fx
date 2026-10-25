@@ -1,0 +1,16 @@
+# Package managers
+yarn.lock
+.yarn/
+.pnp.*
+
+# Output
+/build/
+/.svelte-kit/
+/storybook-static/
+/.playwright-mcp/
+
+# Static assets
+/static/
+
+# Local tool state
+/.impeccable/
