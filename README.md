@@ -14,21 +14,42 @@ Svelte components. Two faces, one codebase:
 
 Effects so far:
 
-| Effect               | Techniques                                                                                        |
-| -------------------- | ------------------------------------------------------------------------------------------------- |
-| Noise                | `feTurbulence`, `feColorMatrix`, `feComponentTransfer`, `mix-blend-mode`                          |
-| Frosted glass        | `backdrop-filter`, `feTurbulence` → `feDisplacementMap`, masked gradient rim                      |
-| Liquid glass         | SDF-generated map via `feImage` → `feDisplacementMap`, `feSpecularLighting`                       |
-| Chromatic aberration | `feColorMatrix` channel split, `feOffset`, `feBlend`, radial `feDisplacementMap`                  |
-| Gooey                | `feGaussianBlur` → `feColorMatrix` alpha threshold, `feComposite`                                 |
-| Lighting             | `feDiffuseLighting`, `feSpecularLighting`, `fePointLight`, `feTurbulence` bump map                |
-| Duotone              | `feColorMatrix` luminance, `feComponentTransfer` table, `feComposite` mix                         |
-| Halftone             | CSS dot gradients + `contrast()` threshold; `feImage`/`feTile` Bayer dither + discrete transfer   |
-| CRT                  | gradient scanlines and mask, `feDisplacementMap` barrel with a generated map, blur + screen bloom |
-| Holographic foil     | `perspective` tilt, pointer custom properties, `mix-blend-mode`, `background-blend-mode`          |
-| Spotlight cards      | pointer-tracked `radial-gradient`, `mask-composite: exclude`, `ResizeObserver`                    |
-| Aurora               | `@property`-registered colors/angles, `cos()`/`sin()`, layered `radial-gradient`                  |
-| Squircles            | `corner-shape` / `superellipse()`, `linear()` spring easing, `clip-path: path()` fallback         |
+| Effect                         | Techniques                                                                                                                    |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| Noise                          | `feTurbulence`, `feColorMatrix`, `feComponentTransfer`, `mix-blend-mode`                                                      |
+| Frosted glass                  | `backdrop-filter`, `feTurbulence` → `feDisplacementMap`, masked gradient rim                                                  |
+| Liquid glass                   | SDF-generated map via `feImage` → `feDisplacementMap`, `feSpecularLighting`                                                   |
+| Chromatic aberration           | `feColorMatrix` channel split, `feOffset`, `feBlend`, radial `feDisplacementMap`                                              |
+| Gooey                          | `feGaussianBlur` → `feColorMatrix` alpha threshold, `feComposite`                                                             |
+| Lighting                       | `feDiffuseLighting`, `feSpecularLighting`, `fePointLight`, `feTurbulence` bump map                                            |
+| Duotone                        | `feColorMatrix` luminance, `feComponentTransfer` table, `feComposite` mix                                                     |
+| Halftone                       | CSS dot gradients + `contrast()` threshold; `feImage`/`feTile` Bayer dither + discrete transfer                               |
+| CRT                            | gradient scanlines and mask, `feDisplacementMap` barrel with a generated map, blur + screen bloom                             |
+| Holographic foil               | `perspective` tilt, pointer custom properties, `mix-blend-mode`, `background-blend-mode`                                      |
+| Spotlight cards                | pointer-tracked `radial-gradient`, `mask-composite: exclude`, `ResizeObserver`                                                |
+| Aurora                         | `@property`-registered colors/angles, `cos()`/`sin()`, layered `radial-gradient`                                              |
+| Squircles                      | `corner-shape` / `superellipse()`, `linear()` spring easing, `clip-path: path()` fallback                                     |
+| Sticker outline                | `feMorphology` dilate, `feGaussianBlur` + `feColorMatrix` threshold, `feFlood`, `feComposite`, `feMerge`                      |
+| Edges and sketch               | `feConvolveMatrix` (Sobel, Laplacian, emboss), `feComponentTransfer` abs/threshold, `feTurbulence` grain, `feBlend`           |
+| Posterize                      | `feComponentTransfer type="discrete"`, `feColorMatrix` saturate, `feConvolveMatrix` ink lines, `feMerge`                      |
+| Pixelate                       | `feFlood` + `feComposite` + `feTile` sample grid → `feMorphology dilate`, tiled `feImage` tile mask                           |
+| Glitch                         | generated row-offset `feImage` → `feDisplacementMap`, channel split, CSS-clocked bursts                                       |
+| Magnifier                      | radial `feImage` zoom map → `feDisplacementMap` + `feMerge`, optional `backdrop-filter: url()`                                |
+| Water ripple                   | animated `feTurbulence` on a `feTile`d tile slid with `feOffset` → `feDisplacementMap`; backdrop via `backdrop-filter: url()` |
+| Caustics                       | `feTurbulence type="turbulence"` ridges → `feComponentTransfer` table, `feDisplacementMap` warp, `feSpecularLighting`         |
+| Ink bleed                      | `feTurbulence` + `feDisplacementMap`, `feGaussianBlur` + `feColorMatrix` soft threshold, `feDiffuseLighting` paper            |
+| Dissolve                       | `feTurbulence` threshold field, `feComponentTransfer` equalization, `feImage` direction ramp, Svelte transition               |
+| Kaleidoscope                   | wedge `clip-path: polygon()` from `tan()`, `rotate: calc(i * 360deg / n)`, mirrored with `scale: -1 1`                        |
+| Neon                           | stacked `text-shadow` / `drop-shadow()`, stepped `@property` flicker (WCAG 2.3.1-checked)                                     |
+| Gradient text                  | `background-clip: text` (prefixed + unprefixed in `@supports`), `-webkit-text-stroke`, `paint-order`                          |
+| Long shadow                    | generated N-step `text-shadow` list, `color-mix()` ramp                                                                       |
+| Border beam                    | `@property` `<angle>` → `conic-gradient`, `mask-composite: exclude` ring, blurred copy                                        |
+| Shimmer                        | `translate`d sheen layer, `background-clip: text`, gradient `mask-image`, `@property` sweep                                   |
+| Split text                     | `sibling-index()` / `sibling-count()` delays, `@starting-style`, inline `--i` fallback                                        |
+| Scroll reveal                  | `animation-timeline: view()`/`scroll()`, `animation-range`, `view-timeline`, `timeline-scope`                                 |
+| View transitions               | `startViewTransition` (document + element-scoped), `view-transition-class`, `clip-path: circle()`                             |
+| Paint Worklet _(experimental)_ | CSS Painting API `paint()`, `CSS.registerProperty`, gradient fallback                                                         |
+| Water sim _(experimental)_     | WebGL2 ping-pong float framebuffers, GLSL wave equation, refraction                                                           |
 
 > Backdrop displacement uses `backdrop-filter: url(#filter)`, which only renders in Chromium-based
 > browsers. Firefox drops the whole backdrop filter (blur included) when the chain contains
@@ -106,10 +127,16 @@ import '@sunsided/web-visual-fx/elements'; // registers all elements
 - **Events:** `<vfx-gooey-menu>` fires `itemselect` (the item) and `openchange`,
   `<vfx-squircle-group>` fires `selectedchange`; the new value is in `event.detail`, and the
   `open` / `selected` properties stay in sync.
-- **Motion:** CSS-animated elements (`vfx-gooey`, `vfx-crt`, `vfx-aurora`) take a `paused`
-  property, since a page-level `data-motion` can't reach into a shadow root.
+- **Motion:** animated elements (`vfx-gooey`, `vfx-crt`, `vfx-aurora`, `vfx-glitch`, `vfx-ripple`,
+  `vfx-caustics`, `vfx-kaleidoscope`, `vfx-neon`, `vfx-gradient-text`, `vfx-border-beam`,
+  `vfx-shimmer`, `vfx-paint-pattern`, `vfx-water-sim`) take a `paused` property, since a
+  page-level `data-motion` can't reach into a shadow root. `@property` rules are ignored inside a
+  shadow root, so the elements register them for the document when they connect.
 - **Not available as an element:** spotlight cards (the grid measures its cards with
-  `querySelectorAll`, which doesn't see slotted children); use the Svelte components.
+  `querySelectorAll`, which doesn't see slotted children) and `Stagger` (it indexes its direct
+  children, which in a shadow root are a `<slot>`), parallax layers (they need the scene's named
+  timeline, which doesn't cross into a shadow root) and the view-transition helpers (use
+  `viewTransition.runViewTransition` from the core entry); use the Svelte components.
 
 React 19 passes props to custom elements as properties and `on<event>` props as listeners. For
 JSX types, reference the declarations once:

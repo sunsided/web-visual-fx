@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import type { RouteId } from '$app/types';
 	import Button from '#lib/components/atoms/Button.svelte';
 	import MotionToggle from '#lib/components/molecules/MotionToggle.svelte';
 	import EffectCard from '#lib/components/organisms/EffectCard.svelte';
@@ -10,6 +11,10 @@
 	const storybook = import.meta.env.DEV ? 'http://localhost:6006' : `${resolve('/')}storybook/`;
 
 	let paused = $state(false);
+
+	// Effect routes take no params, but past 25 routes TypeScript gives up matching the route union
+	// against resolve()'s per-route argument tuples, so each one is passed as a param-less route.
+	const href = (route: RouteId) => resolve(route as '/');
 </script>
 
 <svelte:head>
@@ -50,7 +55,7 @@
 				{#each effects as effect (effect.route)}
 					<li>
 						<EffectCard
-							href={resolve(effect.route)}
+							href={href(effect.route)}
 							title={effect.title}
 							summary={effect.summary}
 							techniques={effect.techniques}
