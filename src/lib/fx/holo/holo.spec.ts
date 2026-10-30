@@ -38,6 +38,10 @@ describe('lerpFactor', () => {
 		expect(lerpFactor(0.8, 1000 / 60)).toBeCloseTo(0.2);
 	});
 
+	it('never moves away from the target on a negative time step', () => {
+		expect(lerpFactor(0.8, -5)).toBe(0);
+	});
+
 	it('is frame-rate independent: two 120 Hz frames equal one 60 Hz frame', () => {
 		const t120 = lerpFactor(0.8, 1000 / 120);
 		expect(1 - (1 - t120) ** 2).toBeCloseTo(lerpFactor(0.8, 1000 / 60));
