@@ -45,3 +45,6 @@ Taskfile.yml
 
 # Task checksums
 /.task
+
+# Research notes
+/docs/

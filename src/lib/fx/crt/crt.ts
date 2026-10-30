@@ -291,15 +291,23 @@ export function encodePng(width: number, height: number, rgb: Uint8Array): Uint8
 
 function base64(bytes: Uint8Array): string {
 	let binary = '';
-	for (const b of bytes) binary += String.fromCharCode(b);
+	// In chunks: spreading a whole large map into one call would overflow the argument limit
+	for (let i = 0; i < bytes.length; i += 0x8000) {
+		binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+	}
 	return btoa(binary);
+}
+
+/** `encodePng` as a `data:` URL, ready for `feImage href`. */
+export function pngDataUrl(width: number, height: number, rgb: Uint8Array): string {
+	return `data:image/png;base64,${base64(encodePng(width, height, rgb))}`;
 }
 
 let cachedMap: string | undefined;
 
 /** The barrel map as a PNG data URL (computed once). */
 export function barrelMapUrl(): string {
-	cachedMap ??= `data:image/png;base64,${base64(encodePng(64, 64, barrelMap(64)))}`;
+	cachedMap ??= pngDataUrl(64, 64, barrelMap(64));
 	return cachedMap;
 }
 

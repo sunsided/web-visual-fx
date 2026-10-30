@@ -188,7 +188,10 @@ export function pointerToUnit(
  */
 export function lerpFactor(smoothing: number, dtMs: number): number {
 	if (smoothing <= 0) return 1;
-	return 1 - Math.pow(clamp(smoothing, 0, 0.999), dtMs / (1000 / 60));
+	// A requestAnimationFrame timestamp is the frame's start, which can be earlier than a
+	// performance.now() taken in an event handler just before. A negative step would move away
+	// from the target.
+	return 1 - Math.pow(clamp(smoothing, 0, 0.999), Math.max(0, dtMs) / (1000 / 60));
 }
 
 /** Moves `current` towards `target` by `t` (0–1); returns a new pose. */
