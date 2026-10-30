@@ -1,7 +1,9 @@
 <!--
 @component
 Linked card for one effect: live preview, title, summary and technique tags on light frosted glass.
-The link is named by the title and described by the summary (not by the whole card text).
+The link is the title, stretched over the whole card with a pseudo-element, so the card stays one
+click target while the preview is not inside an `<a>` (Chromium doesn't run CSS `paint()` worklets
+in links). It is named by the title and described by the summary.
 
 Tokens: `--effect-card-radius`, `--effect-card-preview-height`.
 -->
@@ -31,15 +33,7 @@ Tokens: `--effect-card-radius`, `--effect-card-preview-height`.
 	const id = $props.id();
 </script>
 
-<!-- Callers pass an already resolve()d href, which the lint rule can't see. -->
-<!-- eslint-disable svelte/no-navigation-without-resolve -->
-<a
-	{href}
-	class={['effect-card', className]}
-	aria-labelledby="{id}-title"
-	aria-describedby="{id}-summary"
->
-	<!-- eslint-enable svelte/no-navigation-without-resolve -->
+<article class={['effect-card', className]} aria-labelledby="{id}-title">
 	<GlassPanel
 		radius={24}
 		blur={20}
@@ -54,7 +48,11 @@ Tokens: `--effect-card-radius`, `--effect-card-preview-height`.
 		{#if Preview}
 			<div class="preview"><Preview /></div>
 		{/if}
-		<h2 id="{id}-title">{title}</h2>
+		<h2 id="{id}-title">
+			<!-- Callers pass an already resolve()d href, which the lint rule can't see. -->
+			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+			<a {href} class="link" aria-describedby="{id}-summary">{title}</a>
+		</h2>
 		<p id="{id}-summary">{summary}</p>
 		{#if techniques.length}
 			<ul class="tags" aria-label="Techniques">
@@ -64,7 +62,7 @@ Tokens: `--effect-card-radius`, `--effect-card-preview-height`.
 			</ul>
 		{/if}
 	</GlassPanel>
-</a>
+</article>
 
 <style>
 	.effect-card {
@@ -73,12 +71,35 @@ Tokens: `--effect-card-radius`, `--effect-card-preview-height`.
 		display: block;
 		block-size: 100%;
 		border-radius: var(--_radius);
-		text-decoration: none;
 		transition: translate var(--duration-base) var(--ease-out);
 	}
 
-	.effect-card:hover {
+	/* Hovering the stretched link's ::after counts as hovering the link. */
+	.effect-card:has(.link:hover) {
 		translate: 0 -4px;
+	}
+
+	.effect-card:has(.link:focus-visible) {
+		outline: var(--focus-ring-width) solid var(--focus-ring-color);
+		outline-offset: var(--focus-ring-offset);
+	}
+
+	.link {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.link:focus-visible {
+		outline: none;
+	}
+
+	/* Covers the card: GlassPanel's content box is the nearest positioned ancestor. */
+	.link::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		border-radius: var(--_radius);
 	}
 
 	.effect-card :global(.glass) {
