@@ -121,6 +121,10 @@ jobs:
     # Publishes the tarball built above; runs no project code (lifecycle scripts are skipped).
     permissions:
       packages: write
+    # Shows the publish as a deployment next to github-pages.
+    environment:
+      name: github-packages
+      url: https://github.com/sunsided/web-visual-fx/pkgs/npm/web-visual-fx
     steps:
       - name: Download package
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -162,6 +166,11 @@ jobs:
     # release.yml). Publishes from the tarball built above; lifecycle scripts are skipped.
     permissions:
       id-token: write
+    # Shows the publish as a deployment next to github-pages. If the trusted publisher on
+    # npmjs.com names an environment, it must be this one.
+    environment:
+      name: npm
+      url: ${{ steps.publish.outputs.url }}
     steps:
       - name: Download package
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -176,9 +185,11 @@ jobs:
           package-manager-cache: false
 
       - name: Publish
+        id: publish
         env:
           TAG: ${{ github.ref_name }}
         run: |
+          echo "url=https://www.npmjs.com/package/@sunsided/web-visual-fx/v/${TAG#v}" >> "$GITHUB_OUTPUT"
           # Trusted publishing needs npm 11.5.1 or newer.
           npm_version="$(npm --version)"
           if [[ "$(printf '%s\n' 11.5.1 "$npm_version" | sort -V | head -n1)" != 11.5.1 ]]; then
